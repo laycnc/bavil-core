@@ -1,17 +1,9 @@
-/// @file		gtlib/math/gt_color4.hpp
-/// @date		2014/12/09
-/// @brief		カラー型
-/// @author		shouta_takemura
 #pragma once
 
-
-// C Library
 #include <cassert>
-// STL
 #include <fstream>
 #include <string>
 #include <limits>
-// gtlib
 #include <gt_type.h>
 #include <gt_utility.h>
 #include <math/gt_math_def.h>

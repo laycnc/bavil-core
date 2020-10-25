@@ -29,10 +29,11 @@ namespace gt::math
 	class Radian
 	{
 		f32 m_value;
+
+	public:
 		constexpr Radian(f32 radian) noexcept
 			: m_value(radian)
 		{}
-	public:
 
 		/// <summary>
 		/// デフォルトコンストラクタ.
