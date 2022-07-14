@@ -33,7 +33,7 @@ namespace gt::math
 	constexpr inline auto Clamp(const Ty& value, const Ty& low, const Ty& high) noexcept
 		-> decltype(low < high, Ty())
 	{
-		return std::max(low, std::min(value, high));
+		return std::clamp(value, low, high);
 	}
 
 	/// <summary>
