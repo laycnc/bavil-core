@@ -26,8 +26,8 @@ jobs:
       
     - name: Configure build for amd64
       uses: ilammy/msvc-dev-cmd@v1
-        with:
-          arch: amd64
+      with:
+       arch: amd64
     
     - name: Vcpkg
       run: |
