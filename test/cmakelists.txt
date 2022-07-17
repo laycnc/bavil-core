@@ -1,0 +1,12 @@
+project(bavil_core_test)
+
+enable_testing()
+
+find_package(gtest REQUIRED)
+include(GoogleTest)
+
+add_executable(bavil_core_test "test_delegate.cpp")
+target_link_libraries(bavil_core_test GTest::GTest GTest::Main bavil_core)
+
+gtest_discover_tests(bavil_core_test)
+

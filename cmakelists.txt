@@ -1,8 +1,13 @@
-cmake_minimum_required(VERSION 3.12.2)
+cmake_minimum_required(VERSION 3.20.0)
 
 project(bavil_core)
 
 include(GNUInstallDirs)
+
+#-------------------------------------------------------------------------------------------
+# Options
+#-------------------------------------------------------------------------------------------
+option(BAVIL_BUILD_TESTS "Enable generation of build files for tests" OFF)
 
 # --------------------------
 # language option
@@ -16,6 +21,10 @@ set(CMAKE_CXX_EXTENSIONS ON)
 # --------------------------
 add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
 add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
+
+if(BAVIL_BUILD_TESTS)
+    add_subdirectory(test)
+endif()
 
 set (CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_SOURCE_DIR}/scripts/cmake")
 include(bavil_core_source_lists)
