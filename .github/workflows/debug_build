@@ -1,4 +1,4 @@
-name: CMake
+name: debug_build
 
 on:
   push:
