@@ -1,8 +1,8 @@
-#include "math/gt_quaternion.h"
-#include "math/gt_matrix33.h"
-#include "math/gt_matrix44.h"
+#include "math/bavil_quaternion.h"
+#include "math/bavil_matrix33.h"
+#include "math/bavil_matrix44.h"
 
-namespace gt::math
+namespace bavil::math
 {
 
 	namespace

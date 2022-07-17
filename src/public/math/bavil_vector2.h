@@ -1,12 +1,12 @@
 #pragma once
 
 #include <utility>
-#include "gt_type.h"
-#include "gt_utility.h"
-#include "math/gt_math_function.h"
-#include "math/gt_math_def.h"
+#include "bavil_type.h"
+#include "bavil_utility.h"
+#include "math/bavil_math_function.h"
+#include "math/bavil_math_def.h"
 
-namespace gt::math
+namespace bavil::math
 {
 
 	/// <summary>

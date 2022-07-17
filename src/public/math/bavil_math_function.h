@@ -2,11 +2,11 @@
 
 #include <cmath>
 #include <algorithm>
-#include "gt_type.h"
-#include "gt_utility.h"
-#include "math/gt_angle.h"
+#include "bavil_type.h"
+#include "bavil_utility.h"
+#include "math/bavil_angle.h"
 
-namespace gt::math
+namespace bavil::math
 {
 
 	/// <summary>

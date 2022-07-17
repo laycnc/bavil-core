@@ -2,7 +2,7 @@
 #include <cstdint>
 #include <cstddef>
 /// <summary>gtlib名前空間.</summary>
-namespace gt
+namespace bavil
 {
 
 
@@ -126,7 +126,7 @@ namespace gt
 	  /// <summary>
 	  /// 無効値型.
 	  /// </summary>
-	using none_t = gt::detail::none_helper;
+	using none_t = bavil::detail::none_helper;
 
 	/// <summary>
 	/// 無効値.
@@ -136,7 +136,7 @@ namespace gt
 	/// <summary>
 	/// 初期化を明示的に行わない型.
 	/// </summary>
-	using none_init_t = gt::detail::none_init_holder;
+	using none_init_t = bavil::detail::none_init_holder;
 
 	/// <summary>
 	/// 初期化を行わない定数.

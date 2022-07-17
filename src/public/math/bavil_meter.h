@@ -1,8 +1,8 @@
 #pragma once
 
-#include "gt_type.h"
+#include "bavil_type.h"
 
-namespace gt::math
+namespace bavil::math
 {
 
 	/// <summary>

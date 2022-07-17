@@ -1,12 +1,12 @@
 #pragma once
 
-#include "gt_type.h"
-#include "math/gt_math_def.h"
-#include "math/gt_math_function.h"
-#include "math/gt_vector2.h"
-#include "math/gt_vector3.h"
+#include "bavil_type.h"
+#include "math/bavil_math_def.h"
+#include "math/bavil_math_function.h"
+#include "math/bavil_vector2.h"
+#include "math/bavil_vector3.h"
 
-namespace gt::math
+namespace bavil::math
 {
 
 	struct Quaternion;

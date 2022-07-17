@@ -17,13 +17,11 @@ set(CMAKE_CXX_EXTENSIONS ON)
 add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
 add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 
-file(GLOB BVIL_CORE_PRIVATE_SOURCE_LISTS ${CMAKE_CURRENT_SOURCE_DIR}/src/private/math/**.cpp)
-file(GLOB BVIL_CORE_PUBLIC_SOURCE_LISTS ${CMAKE_CURRENT_SOURCE_DIR}/src/public/math/**.h)
-#file(GLOB BVIL_CORE_NATVIS_SOURCE_LISTS ${CMKAE_PROJECT_SOURCE_DIR}/natvis/**.*natvis)
+set (CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_SOURCE_DIR}/scripts/cmake")
+include(bavil_core_source_lists)
+
 
 add_library(${PROJECT_NAME} STATIC ${BVIL_CORE_PRIVATE_SOURCE_LISTS} ${BVIL_CORE_PUBLIC_SOURCE_LISTS})
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/private)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/public)
-
-install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION lib)

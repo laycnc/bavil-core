@@ -1,10 +1,10 @@
 #pragma once
 
 #include <iterator>
-#include <gt_type.h>
-#include <math/gt_math_def.h>
+#include <bavil_type.h>
+#include <math/bavil_math_def.h>
 
-namespace gt::math::tl
+namespace bavil::math::tl
 {
 
 	/// <summary>

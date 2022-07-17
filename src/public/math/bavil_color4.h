@@ -4,12 +4,12 @@
 #include <fstream>
 #include <string>
 #include <limits>
-#include <gt_type.h>
-#include <gt_utility.h>
-#include <math/gt_math_def.h>
-#include <math/gt_math_function.h>
+#include <bavil_type.h>
+#include <bavil_utility.h>
+#include <math/bavil_math_def.h>
+#include <math/bavil_math_function.h>
 
-namespace gt::math
+namespace bavil::math
 {
 
 	/// <summary>

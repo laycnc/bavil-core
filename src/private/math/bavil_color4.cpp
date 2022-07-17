@@ -1,6 +1,6 @@
-#include "math/gt_color4.h"
+#include "math/bavil_color4.h"
 
-namespace gt::math
+namespace bavil::math
 {
 
 	namespace

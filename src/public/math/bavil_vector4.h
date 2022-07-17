@@ -3,12 +3,12 @@
 #include <cassert>
 #include <utility>
 #include <algorithm>
-#include "gt_type.h"
-#include "math/gt_math_function.h"
-#include "math/gt_math_def.h"
-#include "math/gt_vector3.h"
+#include "bavil_type.h"
+#include "math/bavil_math_function.h"
+#include "math/bavil_math_def.h"
+#include "math/bavil_vector3.h"
 
-namespace gt::math
+namespace bavil::math
 {
 	struct Matrix33;
 	struct Matrix44;

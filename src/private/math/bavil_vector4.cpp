@@ -1,7 +1,7 @@
-#include "math/gt_vector4.h"
-#include "math/gt_matrix44.h"
+#include "math/bavil_vector4.h"
+#include "math/bavil_matrix44.h"
 
-namespace gt::math
+namespace bavil::math
 {
 
 	namespace
