@@ -6,7 +6,7 @@
 #include <concepts>
 #include <compare>
 
-export namespace bavil
+namespace bavil
 {
 
   struct delegate_handle
@@ -26,7 +26,7 @@ export namespace bavil
 
 }  // namespace bavil
 
-export namespace std
+namespace std
 {
   template <>
   struct hash<bavil::delegate_handle>
@@ -38,7 +38,7 @@ export namespace std
   };
 }  // namespace std
 
-export namespace bavil
+namespace bavil
 {
 
   template <class T>
