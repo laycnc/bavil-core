@@ -27,7 +27,7 @@ namespace
 
 		static size_t GetSystemId()
 		{
-			return bavil::core::system_manager::GetneratedSystemId<test_system_manager>();
+			return bavil::core::system_manager::GetneratedSystemId<test_system>();
 		}
 	};
 
