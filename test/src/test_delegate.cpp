@@ -9,7 +9,7 @@ namespace
 }
 
 // 第1引数がテストケース名、第2引数がテスト名
-TEST(MyLibraryTest, Function1Test) {
+TEST(MulticastDelegateTest, Function1Test) {
 	//
 
 	bavil::multicast_delegate<void(const char* message)> events;

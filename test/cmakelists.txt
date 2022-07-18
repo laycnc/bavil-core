@@ -5,7 +5,12 @@ enable_testing()
 find_package(gtest REQUIRED)
 include(GoogleTest)
 
-add_executable(bavil_core_test "test_delegate.cpp")
+set(BAVIL_CORE_TEST_SOURCE_LISTS 
+${CMAKE_CURRENT_SOURCE_DIR}/src/test_delegate.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/src/test_system_manager.cpp
+)
+
+add_executable(bavil_core_test ${BAVIL_CORE_TEST_SOURCE_LISTS})
 target_link_libraries(bavil_core_test GTest::GTest GTest::Main bavil_core)
 
 gtest_discover_tests(bavil_core_test)
