@@ -31,17 +31,16 @@ jobs:
     
     - name: Vcpkg
       run: |
-        vcpkg install tesseract:${{matrix.arch}}-windows-static
         vcpkg integrate install
-        
-    - name: vcpkg-install
-      run: |
-        vcpkg install gtest:x64-windows
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
       run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DBAVIL_BUILD_TESTS=${{env.BAVIL_BUILD_TESTS}} -DCMAKE_GENERATOR_PLATFORM=x64
+        
+    - name: vcpkg-install
+      run: |
+        vcpkg install gtest:x64-windows
 
     - name: Build
       # Build your program with the given configuration
