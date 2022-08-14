@@ -44,10 +44,35 @@ TEST(ObjectTest, ObjectSystemTest)
 
 		ASSERT_EQ(object_system.get_object_num(), 1);
 
+		ASSERT_EQ(test_object.get_reference_count(), 1);
+
 		ASSERT_TRUE(test_object.get_object() != nullptr);
 
 		ASSERT_STREQ(test_object->get_str(), TEST_MESSAGE);
+
+		bavil::ObjectHandleBase temp = test_object;
+
+		ASSERT_EQ(test_object.get_reference_count(), 2);
+
+		ASSERT_TRUE(temp.is_valid());
+
+		bavil::ObjectHandle<TestObject> temp2 = test_object;
+
+		ASSERT_EQ(temp2.get_reference_count(), 3);
+
+		ASSERT_TRUE(temp2.is_valid());
+
+		bavil::ObjectHandleBase temp3 = std::move(test_object);
+
+		ASSERT_TRUE(temp3.is_valid());
+
+		ASSERT_EQ(temp3.get_reference_count(), 3);
+
+		ASSERT_TRUE(!test_object.is_valid());
 	}
+
+	// スコープ外で破棄されているので0のはず
+	ASSERT_EQ(object_system.get_object_num(), 0);
 
 	int a = 0;
 }

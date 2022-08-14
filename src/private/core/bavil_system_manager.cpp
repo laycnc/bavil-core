@@ -5,17 +5,17 @@ namespace bavil::core
 
 	SystemManager::SystemManager() noexcept
 	{
-		s_instance = this;
+		m_instance = this;
 	}
 
 	SystemManager::~SystemManager() noexcept
 	{
-		s_instance = nullptr;
+		m_instance = nullptr;
 	}
 
 	SystemManager& SystemManager::Get()
 	{
-		return *s_instance;
+		return *m_instance;
 	}
 
 	void SystemManager::finalize()

@@ -59,7 +59,7 @@ namespace bavil::core
 		std::unordered_map<size_t, SystemInterface*> system_maps;
 
 		// singleton
-		static inline SystemManager* s_instance;
+		static inline SystemManager* m_instance;
 	};
 
 	/**

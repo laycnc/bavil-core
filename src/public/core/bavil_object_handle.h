@@ -36,6 +36,12 @@ namespace bavil
 			return m_index != -1;
 		}
 
+		/**
+		 * @brief 参照数を取得する
+		 * @return オブジェクトの参照数を取得する
+		*/
+		size_t get_reference_count() const;
+
 	protected:
 		ObjectHandleBase(int64_t _index) noexcept;
 		ObjectBase* get_object_internal() const;

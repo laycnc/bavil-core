@@ -28,6 +28,21 @@ namespace bavil
 		object_reference_increment();
 	}
 
+	/**
+		 * @brief 参照数を取得する
+		 * @return オブジェクトの参照数を取得する
+		*/
+	size_t ObjectHandleBase::get_reference_count() const
+	{
+		// オブジェクトシステム経由でオブジェクトを取得する
+		const auto& object_system = ObjectSystem::Get();
+		if ( const auto* result = object_system.get_object_array_internal(*this) )
+		{
+			return result->ReferenceNum;
+		}
+		return 0;
+	}
+
 	ObjectBase* ObjectHandleBase::get_object_internal() const
 	{
 		// オブジェクトシステム経由でオブジェクトを取得する
