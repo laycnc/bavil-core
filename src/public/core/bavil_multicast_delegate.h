@@ -9,6 +9,9 @@
 namespace bavil
 {
 
+	/**
+	 * デリゲートハンドル
+	 */
   struct delegate_handle
   {
 	size_t handle;
@@ -20,6 +23,7 @@ namespace bavil
 	}
 
 	constexpr delegate_handle(size_t _handle) noexcept : handle(_handle) {}
+	constexpr delegate_handle() noexcept : delegate_handle(0) {}
 
 	auto operator<=>(const delegate_handle&) const = default;
   };
