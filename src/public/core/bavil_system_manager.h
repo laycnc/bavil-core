@@ -28,7 +28,7 @@ namespace bavil::core
 			const size_t id = T::GetSystemId();
 
 			auto result = system_maps.find(id);
-			if (result != system_maps.end())
+			if ( result != system_maps.end() )
 			{
 				SystemInterface* result_system = result->second;
 				return static_cast<T*>(result_system);
@@ -62,7 +62,6 @@ namespace bavil::core
 		static inline SystemManager* s_instance;
 	};
 
-
 	/**
 	 * システム基底クラス
 	 * @tparam Derive システムクラス
@@ -89,4 +88,4 @@ namespace bavil::core
 		}
 	};
 
-}  // namespace bavil::core
+} // namespace bavil::core

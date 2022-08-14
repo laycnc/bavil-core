@@ -30,7 +30,7 @@ namespace bavil
 	}
 
 	[[nodiscard]] ObjectBase* ObjectSystem::get_object_internal(
-	    ObjectHandleBase _handle) const
+	    const ObjectHandleBase& _handle) const
 	{
 		if ( !_handle.is_valid() )
 		{
@@ -46,12 +46,75 @@ namespace bavil
 		return nullptr;
 	}
 
+	[[nodiscard]] ObjectArrayItem* ObjectSystem::get_object_array_internal(
+	    const ObjectHandleBase& _handle)
+	{
+		if ( !_handle.is_valid() )
+		{
+			return nullptr;
+		}
+
+		const int32_t index = _handle.m_index;
+		if ( m_objects.size() > index )
+		{
+			ObjectArrayItem& item = m_objects[index];
+			return &item;
+		}
+		return nullptr;
+	}
+
+	[[nodiscard]] const ObjectArrayItem* ObjectSystem::get_object_array_internal(
+	    const ObjectHandleBase& _handle) const
+	{
+		if ( !_handle.is_valid() )
+		{
+			return nullptr;
+		}
+
+		const int32_t index = _handle.m_index;
+		if ( m_objects.size() > index )
+		{
+			const ObjectArrayItem& item = m_objects[index];
+			return &item;
+		}
+		return nullptr;
+	}
+
+	// オブジェクトの参照を加算する
+	void ObjectSystem::object_reference_increment_internal(
+	    const ObjectHandleBase& _handle)
+	{
+		if ( ObjectArrayItem* item = get_object_array_internal(_handle) )
+		{
+			item->ReferenceNum++;
+		}
+	}
+
+	// オブジェクトの参照を減算する
+	void ObjectSystem::object_reference_decrement_internal(
+	    const ObjectHandleBase& _handle)
+	{
+		if ( ObjectArrayItem* item = get_object_array_internal(_handle) )
+		{
+			item->ReferenceNum--;
+			if ( item->ReferenceNum == 0 )
+			{
+				// 参照数が0になったので削除する必要が有る
+				delete item->ObjectPtr;
+				item->ObjectPtr = nullptr;
+				m_object_num--;
+			}
+		}
+	}
+
 	ObjectHandleBase ObjectSystem::create_object_internal(int32_t     _free_index,
 	                                                      ObjectBase* new_object)
 	{
 		int32_t index  = _free_index;
 		auto&   item   = m_objects[index];
 		item.ObjectPtr = new_object;
+
+		m_object_num++;
 
 		// 構築を行う
 		new_object->construct();

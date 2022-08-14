@@ -14,6 +14,7 @@ namespace bavil
 		friend class ObjectSystem;
 
 	public:
+		~ObjectHandleBase();
 		constexpr ObjectHandleBase() noexcept
 		    : m_index(-1)
 		{
@@ -24,10 +25,10 @@ namespace bavil
 		    : m_index(std::exchange(_other.m_index, -1))
 		{
 		}
-		void operator=(ObjectHandleBase&& _other)
+		void operator=(ObjectHandleBase&& _other) noexcept
 		{
 			// 事前に前のフラグを開放しておく
-			destruct();
+			object_reference_decrement();
 			m_index = std::exchange(_other.m_index, -1);
 		}
 		constexpr bool is_valid() const noexcept
@@ -36,13 +37,10 @@ namespace bavil
 		}
 
 	protected:
-		constexpr ObjectHandleBase(int64_t _index) noexcept
-		    : m_index(_index)
-		{
-		}
+		ObjectHandleBase(int64_t _index) noexcept;
 		ObjectBase* get_object_internal() const;
-		void        construct();
-		void        destruct();
+		void        object_reference_increment();
+		void        object_reference_decrement();
 
 	protected:
 		int64_t m_index;
@@ -75,7 +73,7 @@ namespace bavil
 		void operator=(ObjectHandleBase&& _other) noexcept
 		{
 			// 事前に前のフラグを開放しておく
-			destruct();
+			object_reference_decrement();
 			m_index = std::exchange(_other.m_index, -1);
 		}
 	};
