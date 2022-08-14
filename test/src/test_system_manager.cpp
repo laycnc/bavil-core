@@ -32,8 +32,6 @@ TEST(SystemManagerTest, Function1Test) {
 
 	TestSystem* result = system_manager.get_system<TestSystem>();
 
-	auto* f = (bavil::core::SystemBase<TestSystem>*)result;
-
 	ASSERT_EQ(result != nullptr, true);
 
 	ASSERT_EQ(result->get_system_id(), TestSystem::GetSystemId());

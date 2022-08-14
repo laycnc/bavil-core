@@ -19,7 +19,7 @@ namespace bavil::core
 	};
 
 	template <class T>
-	concept system_concepts = requires(T system)
+	concept SystemConcepts = requires(T system)
 	{
 		{
 			T::GetSystemId()

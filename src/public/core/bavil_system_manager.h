@@ -16,13 +16,13 @@ namespace bavil::core
 
 		static SystemManager& Get();
 
-		template <system_concepts T>
+		template<SystemConcepts T>
 		static T* GetSystem()
 		{
 			return Get().get_system<T>();
 		}
 
-		template <system_concepts T>
+		template<SystemConcepts T>
 		T* get_system()
 		{
 			const size_t id = T::GetSystemId();
@@ -45,7 +45,7 @@ namespace bavil::core
 
 		void finalize();
 
-		template <system_concepts T>
+		template<SystemConcepts T>
 		static size_t GetneratedSystemId()
 		{
 			static size_t s_id = GetneratedSystemIdInternal();
@@ -75,7 +75,7 @@ namespace bavil::core
 
 		static Derive& Get()
 		{
-			return *SystemManager::get_system<Derive>();
+			return *SystemManager::GetSystem<Derive>();
 		}
 
 		virtual size_t get_system_id() const override final

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+	<Type Name="bavil::ObjectHandleBase">
+		<DisplayString Condition="m_index == -1">invalid</DisplayString>
+		<DisplayString Condition="m_index != -1">{__debug__bavil_object_array_top[m_index].ObjectPtr}</DisplayString>
+		<Expand>
+			<ExpandedItem Condition="m_index != -1">__debug__bavil_object_array_top[m_index].ObjectPtr</ExpandedItem>
+		</Expand>
+	</Type>
+
+	<Type Name="bavil::ObjectHandle&lt;*&gt;">
+		<DisplayString Condition="m_index == -1">invalid</DisplayString>
+		<DisplayString Condition="m_index != -1">{__debug__bavil_object_array_top[m_index].ObjectPtr}</DisplayString>
+		<Expand>
+			<ExpandedItem Condition="m_index != -1">($T1*)__debug__bavil_object_array_top[m_index].ObjectPtr</ExpandedItem>
+		</Expand>
+	</Type>
+
+</AutoVisualizer>
