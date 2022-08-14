@@ -8,112 +8,117 @@
 
 namespace bavil
 {
-
 	/**
 	 * デリゲートハンドル
 	 */
-  struct delegate_handle
-  {
-	size_t handle;
-
-	static delegate_handle Generated()
+	struct DelegateHandle
 	{
-	  static size_t s_id = 0;
-	  return {++s_id};
-	}
+		size_t handle;
 
-	constexpr delegate_handle(size_t _handle) noexcept : handle(_handle) {}
-	constexpr delegate_handle() noexcept : delegate_handle(0) {}
+		static DelegateHandle Generated() noexcept
+		{
+			static size_t s_id = 0;
+			return {++s_id};
+		}
 
-	auto operator<=>(const delegate_handle&) const = default;
-  };
+		constexpr DelegateHandle(size_t _handle) noexcept
+		    : handle(_handle)
+		{
+		}
+		constexpr DelegateHandle() noexcept
+		    : DelegateHandle(0)
+		{
+		}
 
-}  // namespace bavil
+		auto operator<=>(const DelegateHandle&) const = default;
+	};
+
+} // namespace bavil
 
 namespace std
 {
-  template <>
-  struct hash<bavil::delegate_handle>
-  {
-	size_t operator()(const bavil::delegate_handle& _handle) const
+	template<>
+	struct hash<bavil::DelegateHandle>
 	{
-	  return std::hash<size_t>()(_handle.handle);
-	}
-  };
-}  // namespace std
+		size_t operator()(const bavil::DelegateHandle& _handle) const
+		{
+			return std::hash<size_t>()(_handle.handle);
+		}
+	};
+} // namespace std
 
 namespace bavil
 {
 
-  template <class T>
-  class MulticastDelegate;
+	template<class T>
+	class MulticastDelegate;
 
-  template <class... Args>
-  class MulticastDelegate<void(Args...)>
-  {
-	using function_t = std::function<void(Args...)>;
+	template<class... Args>
+	class MulticastDelegate<void(Args...)>
+	{
+		using FunctionType = std::function<void(Args...)>;
 
-   public:
-	/**
+	public:
+		/**
 	 * @brief デリゲートを登録する
 	 * @tparam Func デリゲート型
 	 * @param func デリゲート
 	 * @return 
 	*/
-	template <class Func>
-	requires(std::constructible_from<function_t, Func>) delegate_handle
-	    add(Func func)
-	{
-	  delegate_handle handle = delegate_handle::Generated();
+		template<class Func>
+			requires(std::constructible_from<FunctionType, Func>)
+		DelegateHandle add(Func func)
+		{
+			DelegateHandle handle = DelegateHandle::Generated();
 
-	  m_events.emplace(handle, function_t(func));
-	  // m_events
+			m_events.emplace(handle, FunctionType(func));
+			// m_events
 
-	  return handle;
-	}
+			return handle;
+		}
 
-	/**
+		/**
 	 * @brief デリゲートを削除する
 	 * @param _handle ハンドルの型
 	*/
-	void remove(delegate_handle _handle)
-	{
-	  m_events.erase(_handle);
-	}
+		void remove(DelegateHandle _handle)
+		{
+			m_events.erase(_handle);
+		}
 
-	bool is_valid( delegate_handle _handle ) const
-	{
-		auto result = m_events.find(_handle);
-		return result != m_events.end();
-	}
+		bool is_valid(DelegateHandle _handle) const
+		{
+			auto result = m_events.find(_handle);
+			return result != m_events.end();
+		}
 
-	bool has_delegates() const
-	{
-		return !m_events.empty();
-	}
+		bool has_delegates() const
+		{
+			return !m_events.empty();
+		}
 
-	/**
+		/**
 	 * @brief イベントの呼び出し
 	 * @param ...args 
 	*/
-	void broadcast(Args... args)
-	{
-	  for (auto& [handle, target] : m_events)
+		void broadcast(Args... args)
 		{
-		  target(std::move(args)...);
+			for ( auto& [handle, target] : m_events )
+			{
+				target(std::move(args)...);
+			}
 		}
-	}
 
-	/**
+		/**
 	 * @brief 登録したイベントをクリアする
 	*/
-	void clear()
-	{
-	  m_events.clear();
-	}
+		void clear()
+		{
+			m_events.clear();
+		}
 
-   private:
-	std::unordered_map<delegate_handle, function_t> m_events;
-  };
+	private:
+		std::unordered_map<DelegateHandle, FunctionType> m_events;
+	};
 
-}  // namespace bavil
+} // namespace bavil

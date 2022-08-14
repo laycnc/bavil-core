@@ -9,17 +9,19 @@ namespace
 }
 
 // 第1引数がテストケース名、第2引数がテスト名
-TEST(MulticastDelegateTest, Function1Test) {
+TEST(MulticastDelegateTest, Function1Test)
+{
 	//
 
 	bavil::MulticastDelegate<void(const char* message)> events;
 
 	ASSERT_EQ(events.has_delegates(), false);
 
-	auto handle = events.add([](const char* _message)
-		{
-			ASSERT_STREQ(_message, SEND_MESSAGE);
-		});
+	bavil::DelegateHandle handle = events.add(
+	    [](const char* _message)
+	    {
+		    ASSERT_STREQ(_message, SEND_MESSAGE);
+	    });
 
 	ASSERT_EQ(events.has_delegates(), true);
 
@@ -31,5 +33,4 @@ TEST(MulticastDelegateTest, Function1Test) {
 
 	ASSERT_EQ(events.is_valid(handle), false);
 	ASSERT_EQ(events.has_delegates(), false);
-
 }
