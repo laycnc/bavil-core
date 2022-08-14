@@ -6,14 +6,14 @@
 namespace bavil::core
 {
 
-	class system_manager;
+	class SystemManager;
 
-	class system_interface
+	class SystemInterface
 	{
 	public:
-		virtual ~system_interface() {}
+		virtual ~SystemInterface() {}
 
-		virtual void initialize(system_manager& _system_manager) = 0;
+		virtual void initialize(SystemManager &_system_manager) = 0;
 		virtual void finalize() = 0;
 		virtual size_t get_system_id() const = 0;
 	};
@@ -23,9 +23,9 @@ namespace bavil::core
 	{
 		{
 			T::GetSystemId()
-		} -> std::convertible_to<size_t>;
+			} -> std::convertible_to<size_t>;
 
-		std::derived_from<T, system_interface>;
+		std::derived_from<T, SystemInterface>;
 	};
 
-}  // namespace bavil::core
+} // namespace bavil::core

@@ -8,13 +8,13 @@
 namespace bavil::core
 {
 
-	class system_manager
+	class SystemManager
 	{
 	public:
-		system_manager() noexcept;
-		~system_manager() noexcept;
+		SystemManager() noexcept;
+		~SystemManager() noexcept;
 
-		static system_manager& Get();
+		static SystemManager& Get();
 
 		template <system_concepts T>
 		static T* GetSystem()
@@ -30,7 +30,7 @@ namespace bavil::core
 			auto result = system_maps.find(id);
 			if (result != system_maps.end())
 			{
-				system_interface* result_system = result->second;
+				SystemInterface* result_system = result->second;
 				return static_cast<T*>(result_system);
 			}
 
@@ -56,10 +56,37 @@ namespace bavil::core
 		static size_t GetneratedSystemIdInternal();
 
 	private:
-		std::unordered_map<size_t, system_interface*> system_maps;
+		std::unordered_map<size_t, SystemInterface*> system_maps;
 
 		// singleton
-		static inline system_manager* s_instance;
+		static inline SystemManager* s_instance;
+	};
+
+
+	/**
+	 * システム基底クラス
+	 * @tparam Derive システムクラス
+	 */
+	template<class Derive>
+	class SystemBase : public SystemInterface
+	{
+	public:
+		virtual ~SystemBase() {}
+
+		static Derive& Get()
+		{
+			return *SystemManager::get_system<Derive>();
+		}
+
+		virtual size_t get_system_id() const override final
+		{
+			return Derive::GetSystemId();
+		}
+
+		static size_t GetSystemId()
+		{
+			return SystemManager::GetneratedSystemId<Derive>();
+		}
 	};
 
 }  // namespace bavil::core

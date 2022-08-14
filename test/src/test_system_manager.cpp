@@ -7,11 +7,11 @@
 namespace
 {
 
-	class test_system : public bavil::core::system_interface
+	class TestSystem : public bavil::core::SystemBase<TestSystem>
 	{
 	public:
 		virtual void initialize(
-			bavil::core::system_manager& _system_manager) override
+			bavil::core::SystemManager& _system_manager) override
 		{
 			//
 		}
@@ -19,15 +19,6 @@ namespace
 		virtual void finalize() override
 		{
 			//
-		}
-		virtual size_t get_system_id() const override
-		{
-			return GetSystemId();
-		}
-
-		static size_t GetSystemId()
-		{
-			return bavil::core::system_manager::GetneratedSystemId<test_system>();
 		}
 	};
 
@@ -37,12 +28,14 @@ namespace
 TEST(SystemManagerTest, Function1Test) {
 	//
 
-	bavil::core::system_manager system_manager = {};
+	bavil::core::SystemManager system_manager = {};
 
-	test_system* result = system_manager.get_system<test_system>();
+	TestSystem* result = system_manager.get_system<TestSystem>();
+
+	auto* f = (bavil::core::SystemBase<TestSystem>*)result;
 
 	ASSERT_EQ(result != nullptr, true);
 
-	ASSERT_EQ(result->get_system_id(), test_system::GetSystemId());
+	ASSERT_EQ(result->get_system_id(), TestSystem::GetSystemId());
 
 }

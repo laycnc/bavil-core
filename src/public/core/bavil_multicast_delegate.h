@@ -46,10 +46,10 @@ namespace bavil
 {
 
   template <class T>
-  class multicast_delegate;
+  class MulticastDelegate;
 
   template <class... Args>
-  class multicast_delegate<void(Args...)>
+  class MulticastDelegate<void(Args...)>
   {
 	using function_t = std::function<void(Args...)>;
 

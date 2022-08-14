@@ -12,7 +12,7 @@ namespace
 TEST(MulticastDelegateTest, Function1Test) {
 	//
 
-	bavil::multicast_delegate<void(const char* message)> events;
+	bavil::MulticastDelegate<void(const char* message)> events;
 
 	ASSERT_EQ(events.has_delegates(), false);
 

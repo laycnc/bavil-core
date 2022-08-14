@@ -3,25 +3,24 @@
 namespace bavil::core
 {
 
-	system_manager::system_manager() noexcept
+	SystemManager::SystemManager() noexcept
 	{
 		s_instance = this;
 	}
 
-	system_manager::~system_manager() noexcept
+	SystemManager::~SystemManager() noexcept
 	{
 		s_instance = nullptr;
 	}
 
-	system_manager& system_manager::Get()
+	SystemManager& SystemManager::Get()
 	{
 		return *s_instance;
 	}
 
-
-	void system_manager::finalize()
+	void SystemManager::finalize()
 	{
-		for (auto& [id, system] : system_maps)
+		for ( auto& [id, system] : system_maps )
 		{
 			system->finalize();
 			delete system;
@@ -30,13 +29,11 @@ namespace bavil::core
 		system_maps.clear();
 	}
 
-
-	size_t system_manager::GetneratedSystemIdInternal()
+	size_t SystemManager::GetneratedSystemIdInternal()
 	{
 		static size_t s_id = 0;
 		s_id++;
 		return s_id;
 	}
 
-
-}  // namespace bavil::core
+} // namespace bavil::core
