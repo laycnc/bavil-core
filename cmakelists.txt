@@ -34,15 +34,6 @@ endif()
 set (CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_SOURCE_DIR}/scripts/cmake")
 include(bavil_core_source_lists)
 
-
-foreach(navis_var IN LISTS BVIL_CORE_NATVIS_LISTS)
-    set(BVIL_CORE_PUBLIC_NATVIS_LISTS ${BVIL_CORE_PUBLIC_NATVIS_LISTS} "${CMAKE_CURRENT_SOURCE_DIR}${navis_var}" )
-    set(BVIL_CORE_SOURCE_NATVIS_LISTS ${BVIL_CORE_PUBLIC_NATVIS_LISTS}
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}${navis_var}>
-        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}${navis_var}>
-    )
-endforeach()
-
 add_library(bavil_core STATIC ${BVIL_CORE_PRIVATE_SOURCE_LISTS} ${BVIL_CORE_PUBLIC_SOURCE_LISTS} ${BVIL_CORE_PUBLIC_NATVIS_LISTS})
 
 target_include_directories(bavil_core PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/private)
@@ -51,7 +42,7 @@ target_include_directories(bavil_core PUBLIC
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
     )
 
-target_sources(bavil_core INTERFACE ${BVIL_CORE_SOURCE_NATVIS_LISTS})
+#target_sources(bavil_core INTERFACE ${BVIL_CORE_PUBLIC_NATVIS_LISTS})
 
 if(BAVIL_BUILD_INSTALL)
 
