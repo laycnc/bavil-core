@@ -24,7 +24,6 @@ set(BVIL_CORE_PUBLIC_SOURCE_LISTS
 	"${CMAKE_CURRENT_SOURCE_DIR}/src/public/math/bavil_vector2.h"
 	"${CMAKE_CURRENT_SOURCE_DIR}/src/public/math/bavil_vector3.h"
 	"${CMAKE_CURRENT_SOURCE_DIR}/src/public/math/bavil_vector4.h"
-	"${CMAKE_CURRENT_SOURCE_DIR}/src/natvis/bavil_object.natvis"
 )
 
 set(BVIL_CORE_PRIVATE_SOURCE_LISTS
@@ -39,4 +38,9 @@ set(BVIL_CORE_PRIVATE_SOURCE_LISTS
 	"${CMAKE_CURRENT_SOURCE_DIR}/src/private/math/bavil_vector2.cpp"
 	"${CMAKE_CURRENT_SOURCE_DIR}/src/private/math/bavil_vector3.cpp"
 	"${CMAKE_CURRENT_SOURCE_DIR}/src/private/math/bavil_vector4.cpp"
+)
+
+
+set(BVIL_CORE_PUBLIC_NATVIS_LISTS
+	"${CMAKE_CURRENT_SOURCE_DIR}/src/natvis/bavil_object.natvis"
 )
