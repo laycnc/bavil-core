@@ -47,6 +47,6 @@ set(BVIL_CORE_PRIVATE_SOURCE_LISTS
 )
 
 
-set(BVIL_CORE_PUBLIC_NATVIS_LISTS
-	"${CMAKE_CURRENT_SOURCE_DIR}/src/natvis/bavil_object.natvis"
+set(BVIL_CORE_NATVIS_LISTS
+	"/src/natvis/bavil_object.natvis"
 )
