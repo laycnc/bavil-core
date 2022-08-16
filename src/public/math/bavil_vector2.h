@@ -6,6 +6,9 @@
 #include "math/bavil_math_function.h"
 #include "math/bavil_math_def.h"
 
+#pragma warning(push)
+#pragma warning(disable : 4201)
+
 namespace bavil::math
 {
 
@@ -14,9 +17,9 @@ namespace bavil::math
 	/// </summary>
 	struct Vector2
 	{
-		using value_type = f32;
+		using value_type       = f32;
 		using value_array_type = f32[2];
-		using size_type = u32;
+		using size_type        = u32;
 	public:
 		union
 		{
@@ -25,11 +28,11 @@ namespace bavil::math
 				/// <summary>
 				/// X成分.
 				/// </summary>
-				value_type	x;
+				value_type x;
 				/// <summary>
 				/// Y成分
 				/// </summary>
-				value_type	y;
+				value_type y;
 			};
 			value_array_type v;
 		};
@@ -41,19 +44,19 @@ namespace bavil::math
 		/// <summary>
 		/// 全ての要素がゼロに設定された2次元ベクトル.
 		/// </summary>
-		static const Vector2& ZERO;
+		static const Vector2 ZERO;
 		/// <summary>
 		/// 全ての要素が1に設定された2次元ベクトル.
 		/// </summary>
-		static const Vector2& ONE;
+		static const Vector2 ONE;
 		/// <summary>
 		/// X軸のみ1に設定された2次元ベクトル.
 		/// </summary>
-		static const Vector2& UNIT_X;
+		static const Vector2 UNIT_X;
 		/// <summary>
 		/// Y軸のみ1に設定された2次元ベクトル.
 		/// </summary>
-		static const Vector2& UNIT_Y;
+		static const Vector2 UNIT_Y;
 
 	public:
 		/// <summary>
@@ -74,9 +77,10 @@ namespace bavil::math
 		/// <param name="my">自身の座標.</param>
 		/// <param name="target">ターゲット座標.</param>
 		/// <returns>距離を返す.</returns>
-		static value_type DistanceSqr(const Vector2& my, const Vector2& target) noexcept
+		static value_type DistanceSqr(const Vector2& my,
+		                              const Vector2& target) noexcept
 		{
-			return (target - my).lengthSqr();
+			return (target - my).length_sqr();
 		}
 
 		/// <summary>
@@ -85,9 +89,11 @@ namespace bavil::math
 		/// <param name="my">自身の座標.</param>
 		/// <param name="target">ターゲット座標.</param>
 		/// <returns>移動量を返す.</returns>
-		static Vector2 Velocity(const Vector2& my, const Vector2& target, const value_type speed = 1.0f) noexcept
+		static Vector2 Velocity(const Vector2& my,
+		                        const Vector2& target,
+		                        value_type     speed = 1.0f) noexcept
 		{
-			return (target - my).getNormalized() * speed;
+			return (target - my).get_normalized() * speed;
 		}
 
 		/// <summary>
@@ -97,9 +103,9 @@ namespace bavil::math
 		/// <param name="radian">角度</param>
 		/// <param name="speed">速度</param>
 		/// <returns>移動量を返す</returns>
-		static Vector2 Velocity(Radian radian, const value_type speed = 1.0f) noexcept
+		static Vector2 Velocity(Radian radian, value_type speed = 1.0f) noexcept
 		{
-			return Vector2{ Cos(radian) * speed, Sin(radian) * speed };
+			return Vector2{Cos(radian) * speed, Sin(radian) * speed};
 		}
 
 		/// <summary>
@@ -108,7 +114,9 @@ namespace bavil::math
 		/// <param name="">開始ベクトル.</param>
 		/// <param name="">終了ベクトル.</param>
 		/// <param name="">時間<para>.0.0(開始値)～1.0(終了値)</para>.</param>
-		static Vector2 Lerp(const Vector2& start, const Vector2& end, const value_type t) noexcept
+		static Vector2 Lerp(const Vector2& start,
+		                    const Vector2& end,
+		                    value_type     t) noexcept
 		{
 			return start * (static_cast<value_type>(1.0) - t) + end * t;
 		}
@@ -119,9 +127,11 @@ namespace bavil::math
 		/// <param name="P">2Dベクトル.</param>
 		/// <param name="V">2Dベクトル.</param>
 		/// <param name="t">係数.</param>
-		static Vector2 LinearEquation(const Vector2& P, const Vector2& V, const value_type t) noexcept
+		static Vector2 LinearEquation(const Vector2& P,
+		                              const Vector2& V,
+		                              value_type     t) noexcept
 		{
-			return Vector2{ V.x * t + P.x, V.y * t + P.y };
+			return Vector2{V.x * t + P.x, V.y * t + P.y};
 		}
 
 		/// <summary>
@@ -152,13 +162,12 @@ namespace bavil::math
 		/// <param name="v1">ベクトル1.</param>
 		/// <param name="v2">ベクトル1.</param>
 		/// <returns>角度を返す.</returns>
-		static CONSTEXPR_CPP20 value_type InnerDegree(const Vector2& v1, const Vector2& v2)
+		static value_type InnerDegree(const Vector2& v1, const Vector2& v2)
 		{
 			value_type cos_theta = v1.dot(v2) / (v1.length() * v2.length());
 
 			return std::acos(std::clamp(cos_theta, -1.0f, 1.0f));
 		}
-
 
 		/// <summary>
 		/// ベクトルの座標変換を行う.
@@ -170,7 +179,7 @@ namespace bavil::math
 
 		/// <summary>
 		/// 法線ベクトルの座標変換を行う.
-		/// </summary>		
+		/// </summary>
 		/// <typeparam name="Mat33">行列型.</typeparam>
 		/// <typeparam name="">3行3列の行列か判定.</typeparam>
 		/// <param name="pV">変換前のベクトル.</param>
@@ -185,14 +194,16 @@ namespace bavil::math
 		/// <param name="pV">変換前のベクトル.</param>
 		/// <param name="pM">座標変換行列.</param>
 		/// <returns>変換後の法線ベクトル.</returns>
-		static Vector2 TransformCoord(const Vector2& target, const Matrix44& M) noexcept;
+		static Vector2 TransformCoord(const Vector2&  target,
+		                              const Matrix44& M) noexcept;
 
 	public:
 		/// <summary>
 		/// コンストラクタ.
 		/// </summary>
 		constexpr Vector2() noexcept
-			: x(), y()
+		    : x()
+		    , y()
 		{
 		}
 
@@ -200,16 +211,15 @@ namespace bavil::math
 		/// コンストラクタ.
 		/// </summary>
 		/// <param name="">初期化無視型.</param>
-		explicit Vector2(none_init_t) noexcept
-		{
-		}
+		explicit Vector2(none_init_t) noexcept {}
 
 		/// <summary>
 		/// コンストラクタ.
 		/// </summary>
 		/// <param name="_xy">XY成分.</param>
 		constexpr Vector2(const value_type _xy) noexcept
-			: x(_xy), y(_xy)
+		    : x(_xy)
+		    , y(_xy)
 		{
 		}
 
@@ -219,7 +229,8 @@ namespace bavil::math
 		/// <param name="_x">X成分.</param>
 		/// <param name="_y">Y成分.</param>
 		constexpr Vector2(const value_type _x, const value_type _y) noexcept
-			: x(_x), y(_y)
+		    : x(_x)
+		    , y(_y)
 		{
 		}
 
@@ -228,7 +239,8 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="p">要素の配列の先頭ポインタ.</param>
 		explicit constexpr Vector2(const value_type* p) noexcept
-			: x(p[0]), y(p[1])
+		    : x(p[0])
+		    , y(p[1])
 		{
 		}
 
@@ -247,9 +259,9 @@ namespace bavil::math
 		/// 正規化.
 		/// </summary>
 		/// <returns>正規化後の参照を返す.</returns>
-		constexpr Vector2& normalize() noexcept
+		Vector2& normalize() noexcept
 		{
-			if (const value_type len = this->lengthSqr())
+			if ( const value_type len = this->length_sqr() )
 			{
 				*this *= 1.f / std::sqrt(len);
 			}
@@ -261,7 +273,7 @@ namespace bavil::math
 		/// 正規化したベクトルを取得する.
 		/// </summary>
 		/// <returns>正規化したベクトルを返す.</returns>
-		constexpr Vector2 getNormalized() const noexcept
+		Vector2 get_normalized() const noexcept
 		{
 			return Vector2(*this).normalize();
 		}
@@ -282,7 +294,7 @@ namespace bavil::math
 		/// <para>二乗和のみで平方根をとらない.</para>
 		/// </summary>
 		/// <returns>ベクトルの長さを返す.</returns>
-		constexpr value_type lengthSqr() const noexcept
+		value_type length_sqr() const noexcept
 		{
 			return this->dot(*this);
 		}
@@ -291,9 +303,9 @@ namespace bavil::math
 		/// ベクトルの長さを求める.
 		/// </summary>
 		/// <returns>ベクトルの長さを返す.</returns>
-		CONSTEXPR_CPP20 value_type length() const noexcept
+		value_type length() const noexcept
 		{
-			return std::sqrt(this->lengthSqr());
+			return std::sqrt(this->length_sqr());
 		}
 
 		/// <summary>
@@ -301,7 +313,7 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="endPoint">終点.</param>
 		/// <returns>距離を返す.</returns>
-		CONSTEXPR_CPP20 value_type distance(const Vector2& endPoint) const
+		value_type distance(const Vector2& endPoint) const
 		{
 			return (*this - endPoint).length();
 		}
@@ -312,9 +324,9 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="endPoint">終点.</param>
 		/// <returns>距離を返す.</returns>
-		constexpr value_type distanceSqr(const Vector2& endPoint) const noexcept
+		value_type distance_sqr(const Vector2& endPoint) const noexcept
 		{
-			return (*this - endPoint).lengthSqr();
+			return (*this - endPoint).length_sqr();
 		}
 
 		/// <summary>
@@ -324,7 +336,7 @@ namespace bavil::math
 		/// <returns>外積を返す.</returns>
 		constexpr value_type ccw(const Vector2& other) const noexcept
 		{
-			return	this->x * other.y - this->y * other.x;
+			return this->x * other.y - this->y * other.x;
 		}
 
 		/// <summary>
@@ -338,17 +350,13 @@ namespace bavil::math
 			return *this;
 		}
 
-
 		/// <summary>
 		/// 各要素の最小値を求めたベクトルを返す.
 		/// </summary>
 		constexpr Vector2 minimize(const Vector2& other) const& noexcept
 		{
-			return
-			{
-				(this->x < other.x) ? this->x : other.x,
-				(this->y < other.y) ? this->y : other.y
-			};
+			return {(this->x < other.x) ? this->x : other.x,
+			        (this->y < other.y) ? this->y : other.y};
 		}
 
 		/// <summary>
@@ -369,11 +377,8 @@ namespace bavil::math
 		/// <returns>各要素の最大値を求めたベクトルを返す.</returns>
 		constexpr Vector2 maximize(const Vector2& other) const& noexcept
 		{
-			return
-			{
-				(this->x > other.x) ? this->x : other.x,
-				(this->y > other.y) ? this->y : other.y
-			};
+			return {(this->x > other.x) ? this->x : other.x,
+			        (this->y > other.y) ? this->y : other.y};
 		}
 
 		/// <summary>
@@ -383,7 +388,9 @@ namespace bavil::math
 		/// <param name="end">終了時のベクトル.</param>
 		/// <param name="amount">補間値(0.0~1.0).</param>
 		/// <returns>補間後の参照を返す.</returns>
-		constexpr Vector2& lerp(const Vector2& start, const Vector2& end, value_type amount) noexcept
+		constexpr Vector2& lerp(const Vector2& start,
+		                        const Vector2& end,
+		                        value_type     amount) noexcept
 		{
 			*this = (start * (1.f - amount)) + end * amount;
 
@@ -398,7 +405,10 @@ namespace bavil::math
 		/// <param name="V3">ベクトル.</param>
 		/// <param name="amount">補間値(0.0~1.0).</param>
 		/// <returns>補間後の参照を返す.</returns>
-		constexpr Vector2& quadratic(const Vector2& V1, const Vector2& V2, const Vector2& V3, const value_type amount)
+		constexpr Vector2& quadratic(const Vector2& V1,
+		                             const Vector2& V2,
+		                             const Vector2& V3,
+		                             value_type     amount)
 		{
 			this->x = math::Quadratic(V1.x, V2.x, V3.x, amount);
 			this->y = math::Quadratic(V1.y, V2.y, V3.y, amount);
@@ -413,10 +423,10 @@ namespace bavil::math
 		constexpr Vector2& reflect(const Vector2& I, const Vector2& N)
 		{
 			/* Out = 2 * ( -I dot N ) * N + I */
-			const Vector2 T = N * ((-I).dot(N) * 2.0f);
-			*this = T + I;
+			const Vector2 t = N * ((-I).dot(N) * 2.0f);
+			*this           = t + I;
 
-			return	*this;
+			return *this;
 		}
 
 		/// <summary>
@@ -425,21 +435,23 @@ namespace bavil::math
 		/// <param name="I">入射ベクトル.</param>
 		/// <param name="N">反射ベクトル.</param>
 		/// <param name="Eta">屈折比率.</param>
-		constexpr Vector2& refract(const Vector2& I, const Vector2& N, const value_type Eta)
+		constexpr Vector2& refract(const Vector2& I,
+		                           const Vector2& N,
+		                           value_type     Eta)
 		{
-			Vector2 T1 = -I;
-			const value_type cosI = T1.dot(N);
-			const value_type cosT2 = 1.f - Eta * Eta * (1.0f - cosI * cosI);
+			Vector2          t1     = -I;
+			const value_type cos_i  = t1.dot(N);
+			const value_type cos_t2 = 1.f - Eta * Eta * (1.0f - cos_i * cos_i);
 
-			if (cosT2 <= 0.0f)
+			if ( cos_t2 <= 0.0f )
 			{
 				return *this = Vector2();
 			}
 
-			T1 = I * Eta;
-			const Vector2 T2 = N * (Eta * cosI - std::sqrt(std::abs(cosT2)));
-			*this = T1 + T2;
-			return	*this;
+			t1               = I * Eta;
+			const Vector2 t2 = N * (Eta * cos_i - std::sqrt(std::abs(cos_t2)));
+			*this            = t1 + t2;
+			return *this;
 		}
 
 		/// <summary>
@@ -447,7 +459,7 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="V">ベクトル.</param>
 		/// <returns>角度を返す.</returns>
-		CONSTEXPR_CPP20 value_type degree(const Vector2& V) const
+		value_type degree(const Vector2& V) const
 		{
 			return Vector2::InnerDegree(*this, V);
 		}
@@ -455,9 +467,9 @@ namespace bavil::math
 		/// <summary>
 		/// 方位角を求める.
 		/// </summary>
-		CONSTEXPR_CPP20 value_type getDirection() const noexcept
+		value_type get_direction() const noexcept
 		{
-			if (const value_type len = this->length())
+			if ( const value_type len = this->length() )
 			{
 				// ベクトルを正規化する.
 				// 方角の計算を行う.
@@ -471,12 +483,12 @@ namespace bavil::math
 		/// 方位角からベクトルを求める.
 		/// </summary>
 		/// <param name="direction">方位角.</param>
-		CONSTEXPR_CPP20 Vector2& fromDirection(Radian direction) noexcept
+		Vector2& from_direction(Radian direction) noexcept
 		{
 			this->x = Sin(direction);
 			this->y = Cos(direction);
 
-			return	*this;
+			return *this;
 		}
 
 		/// <summary>
@@ -486,7 +498,7 @@ namespace bavil::math
 		{
 #if __cpp_constexpr >= 201304
 			return std::begin(this->v);
-#else //! __cpp_constexpr >= 201304
+#else  //! __cpp_constexpr >= 201304
 			return std::begin(reinterpret_cast<value_array_type&>(*this));
 #endif //! __cpp_constexpr >= 201304
 		}
@@ -498,7 +510,7 @@ namespace bavil::math
 		{
 #if __cpp_constexpr >= 201304
 			return std::begin(this->v);
-#else //! __cpp_constexpr >= 201304
+#else  //! __cpp_constexpr >= 201304
 			return std::begin(reinterpret_cast<const value_array_type&>(*this));
 #endif //! __cpp_constexpr >= 201304
 		}
@@ -510,7 +522,7 @@ namespace bavil::math
 		{
 #if __cpp_constexpr >= 201304
 			return std::end(this->v);
-#else //! __cpp_constexpr >= 201304
+#else  //! __cpp_constexpr >= 201304
 			return std::end(reinterpret_cast<value_array_type&>(*this));
 #endif //! __cpp_constexpr >= 201304
 		}
@@ -522,7 +534,7 @@ namespace bavil::math
 		{
 #if __cpp_constexpr >= 201304
 			return std::end(this->v);
-#else //! __cpp_constexpr >= 201304
+#else  //! __cpp_constexpr >= 201304
 			return std::end(reinterpret_cast<const value_array_type&>(*this));
 #endif //! __cpp_constexpr >= 201304
 		}
@@ -530,17 +542,17 @@ namespace bavil::math
 		/// <summary>
 		/// 代入演算子オーバーロード.
 		/// </summary>
-		Vector2& operator = (const Vector2&) = default;
+		Vector2& operator=(const Vector2&) = default;
 
 		/// <summary>
 		/// キャスト演算子オーバーロード.
 		/// </summary>
 		/// <returns>変換後の要素を返す.</returns>
-		explicit operator value_type* (void)
+		explicit operator value_type*(void)
 		{
 #if __cpp_constexpr >= 201304
 			return this->v;
-#else //! __cpp_constexpr >= 201304
+#else  //! __cpp_constexpr >= 201304
 			return reinterpret_cast<value_type*>(this);
 #endif //! __cpp_constexpr >= 201304
 		}
@@ -549,11 +561,11 @@ namespace bavil::math
 		/// キャスト演算子オーバーロード.
 		/// </summary>
 		/// <returns>変換後の要素を返す.</returns>
-		explicit operator const value_type* () const
+		explicit operator const value_type*() const
 		{
 #if __cpp_constexpr >= 201304
 			return this->v;
-#else //! __cpp_constexpr >= 201304
+#else  //! __cpp_constexpr >= 201304
 			return reinterpret_cast<const value_type*>(this);
 #endif //! __cpp_constexpr >= 201304
 		}
@@ -563,13 +575,13 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="_index">アクセスする要素.</param>
 		/// <returns>アクセスした要素の参照.</returns>
-		constexpr value_type& operator [] (const size_type _index) noexcept
+		constexpr value_type& operator[](const size_type _index) noexcept
 		{
 #if __cpp_constexpr >= 201304
 			return this->v[_index];
-#else //! __cpp_constexpr >= 201304
+#else  //! __cpp_constexpr >= 201304
 			return reinterpret_cast<value_array_type&>(*this)[_index];
-#endif //! __cpp_constexpr >= 201304			
+#endif //! __cpp_constexpr >= 201304
 		}
 
 		/// <summary>
@@ -577,21 +589,20 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="_index">アクセスする要素.</param>
 		/// <returns>アクセスした要素の参照.</returns>
-		constexpr const value_type& operator [] (const size_type _index) const noexcept
+		constexpr const value_type& operator[](const size_type _index) const noexcept
 		{
 #if __cpp_constexpr >= 201304
 			return this->v[_index];
-#else //! __cpp_constexpr >= 201304
+#else  //! __cpp_constexpr >= 201304
 			return reinterpret_cast<const value_array_type&>(*this)[_index];
-#endif //! __cpp_constexpr >= 201304			
+#endif //! __cpp_constexpr >= 201304
 		}
-
 
 		/// <summary>
 		/// 加算単行演算子オーバーロード.
 		/// </summary>
 		/// <returns>加算ベクトルを返す.</returns>
-		constexpr Vector2 operator + () const& noexcept
+		constexpr Vector2 operator+() const& noexcept
 		{
 			return *this;
 		}
@@ -600,7 +611,7 @@ namespace bavil::math
 		/// 加算単行演算子オーバーロード.
 		/// </summary>
 		/// <returns>加算ベクトルを返す.</returns>
-		constexpr Vector2&& operator + () && noexcept
+		constexpr Vector2&& operator+() && noexcept
 		{
 			return std::move(*this);
 		}
@@ -609,16 +620,16 @@ namespace bavil::math
 		/// 減算単行演算子オーバーロード.
 		/// </summary>
 		/// <returns>減算ベクトルを返す.</returns>
-		constexpr Vector2 operator - () const& noexcept
+		constexpr Vector2 operator-() const& noexcept
 		{
-			return{ -x, -y };
+			return {-x, -y};
 		}
 
 		/// <summary>
 		/// 減算単行演算子オーバーロード.
 		/// </summary>
 		/// <returns>減算ベクトルを返す.</returns>
-		constexpr Vector2&& operator - () && noexcept
+		constexpr Vector2&& operator-() && noexcept
 		{
 			this->x = -x;
 			this->y = -y;
@@ -630,11 +641,11 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="other">加算相手ベクトル.</param>
 		/// <returns>加算後のベクトルを返す.</returns>
-		constexpr Vector2& operator += (const Vector2& other) noexcept
+		constexpr Vector2& operator+=(const Vector2& other) noexcept
 		{
 			this->x += other.x;
 			this->y += other.y;
-			return	*this;
+			return *this;
 		}
 
 		/// <summary>
@@ -642,11 +653,11 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="other">減算相手ベクトル.</param>
 		/// <returns>減算後のベクトルを返す.</returns>
-		constexpr Vector2& operator -= (const Vector2& other) noexcept
+		constexpr Vector2& operator-=(const Vector2& other) noexcept
 		{
 			this->x -= other.x;
 			this->y -= other.y;
-			return	*this;
+			return *this;
 		}
 
 		/// <summary>
@@ -654,11 +665,11 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="other">乗算相手ベクトル.</param>
 		/// <returns>乗算後のベクトルを返す.</returns>
-		constexpr Vector2& operator *= (const Vector2& other) noexcept
+		constexpr Vector2& operator*=(const Vector2& other) noexcept
 		{
 			this->x *= other.x;
 			this->y *= other.y;
-			return	*this;
+			return *this;
 		}
 
 		/// <summary>
@@ -666,11 +677,11 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="other">乗算相手ベクトル.</param>
 		/// <returns>乗算後のベクトルを返す.</returns>
-		constexpr Vector2& operator /= (const Vector2& other) noexcept
+		constexpr Vector2& operator/=(const Vector2& other) noexcept
 		{
 			this->x /= other.x;
 			this->y /= other.y;
-			return	*this;
+			return *this;
 		}
 
 		/// <summary>
@@ -678,11 +689,11 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="scale">スカラー値.</param>
 		/// <returns>乗算後のベクトルを返す.</returns>
-		constexpr Vector2& operator *= (const value_type other) noexcept
+		constexpr Vector2& operator*=(value_type other) noexcept
 		{
 			this->x *= other;
 			this->y *= other;
-			return	*this;
+			return *this;
 		}
 
 		/// <summary>
@@ -690,7 +701,7 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="scale">スカラー値.</param>
 		/// <returns>除算後のベクトルを返す.</returns>
-		constexpr Vector2& operator /= (const value_type other) noexcept
+		constexpr Vector2& operator/=(value_type other) noexcept
 		{
 			return *this *= 1.f / other;
 		}
@@ -700,7 +711,7 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="right">右辺値.</param>
 		/// <returns>加算後のベクトルを返す.</returns>
-		constexpr Vector2&& operator + (const Vector2& right) && noexcept
+		constexpr Vector2&& operator+(const Vector2& right) && noexcept
 		{
 			return std::move(*this += right);
 		}
@@ -710,13 +721,9 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="right">右辺値.</param>
 		/// <returns>加算後のベクトルを返す.</returns>
-		constexpr Vector2 operator + (const Vector2& right) const& noexcept
+		constexpr Vector2 operator+(const Vector2& right) const& noexcept
 		{
-			return Vector2
-			{
-				this->x + right.x,
-				this->y + right.y
-			};
+			return Vector2{this->x + right.x, this->y + right.y};
 		}
 
 		/// <summary>
@@ -724,7 +731,7 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="right">右辺値.</param>
 		/// <returns>減算後のベクトルを返す.</returns>
-		constexpr Vector2&& operator - (const Vector2& right) && noexcept
+		constexpr Vector2&& operator-(const Vector2& right) && noexcept
 		{
 			return std::move(*this -= right);
 		}
@@ -734,13 +741,9 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="right">右辺値.</param>
 		/// <returns>減算後のベクトルを返す.</returns>
-		constexpr Vector2 operator - (const Vector2& right) const& noexcept
+		constexpr Vector2 operator-(const Vector2& right) const& noexcept
 		{
-			return
-			{
-				this->x - right.x,
-				this->y - right.y
-			};
+			return {this->x - right.x, this->y - right.y};
 		}
 
 		/// <summary>
@@ -748,7 +751,7 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="right">右辺値.</param>
 		/// <returns>乗算後のベクトルを返す.</returns>
-		constexpr Vector2&& operator * (const Vector2& right) && noexcept
+		constexpr Vector2&& operator*(const Vector2& right) && noexcept
 		{
 			return std::move(*this *= right);
 		}
@@ -758,13 +761,9 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="right">右辺値.</param>
 		/// <returns>乗算後のベクトルを返す.</returns>
-		constexpr Vector2 operator * (const Vector2& right) const& noexcept
+		constexpr Vector2 operator*(const Vector2& right) const& noexcept
 		{
-			return
-			{
-				this->x * right.x,
-				this->y * right.y
-			};
+			return {this->x * right.x, this->y * right.y};
 		}
 
 		/// <summary>
@@ -772,7 +771,7 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="right">右辺値.</param>
 		/// <returns>乗算後のベクトルを返す.</returns>
-		constexpr Vector2&& operator * (const value_type right) && noexcept
+		constexpr Vector2&& operator*(value_type right) && noexcept
 		{
 			return std::move(*this *= right);
 		}
@@ -782,13 +781,9 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="right">右辺値.</param>
 		/// <returns>乗算後のベクトルを返す.</returns>
-		constexpr Vector2 operator * (const value_type right) const& noexcept
+		constexpr Vector2 operator*(value_type right) const& noexcept
 		{
-			return
-			{
-				this->x * right,
-				this->y * right
-			};
+			return {this->x * right, this->y * right};
 		}
 
 		/// <summary>
@@ -796,18 +791,18 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="right">右辺値.</param>
 		/// <returns>乗算後のベクトルを返す.</returns>
-		friend Vector2 operator * (const value_type left, const Vector2& right) noexcept
+		friend Vector2 operator*(value_type left, const Vector2& right) noexcept
 		{
-			return	right * left;
+			return right * left;
 		}
 
-		friend Vector2 operator * (const Matrix33& M, const Vector2& v) noexcept;
+		friend Vector2 operator*(const Matrix33& M, const Vector2& v) noexcept;
 
-		Vector2 operator * (const Matrix33& M) const noexcept;
+		Vector2 operator*(const Matrix33& M) const noexcept;
 
-		friend Vector2 operator * (const Matrix44& left, const Vector2& right);
+		friend Vector2 operator*(const Matrix44& left, const Vector2& right);
 
-		Vector2 operator * (const Matrix44& right) const;
+		Vector2 operator*(const Matrix44& right) const;
 
 		/// <summary>
 		/// 等価2項演算子オーバーロード.
@@ -815,7 +810,7 @@ namespace bavil::math
 		/// <param name="v1">ベクトル1.</param>
 		/// <param name="v2">ベクトル2.</param>
 		/// <returns>要素が違っていれば真を返す.</returns>
-		constexpr bool operator == (const Vector2& right) const noexcept
+		constexpr bool operator==(const Vector2& right) const noexcept
 		{
 			return this->x == right.x && this->y == right.y;
 		}
@@ -826,9 +821,9 @@ namespace bavil::math
 		/// <param name="v1">ベクトル1.</param>
 		/// <param name="v2">ベクトル2.</param>
 		/// <returns>要素が違っていれば真を返す.</returns>
-		constexpr bool operator != (const Vector2& right) const noexcept
+		constexpr bool operator!=(const Vector2& right) const noexcept
 		{
-			return	!(*this == right);
+			return !(*this == right);
 		}
 
 		/// <summary>
@@ -837,7 +832,7 @@ namespace bavil::math
 		/// <param name="v1">ベクトル1.</param>
 		/// <param name="v2">ベクトル2.</param>
 		/// <returns>要素2より大きければ真を返す.</returns>
-		constexpr bool operator < (const Vector2& right) const noexcept
+		constexpr bool operator<(const Vector2& right) const noexcept
 		{
 			return (this->x < right.x) && (this->y < right.y);
 		}
@@ -848,7 +843,7 @@ namespace bavil::math
 		/// <param name="v1">ベクトル1.</param>
 		/// <param name="v2">ベクトル2.</param>
 		/// <returns>要素2より小さければ真を返す.</returns>
-		constexpr bool operator >(const Vector2& right) const noexcept
+		constexpr bool operator>(const Vector2& right) const noexcept
 		{
 			return (this->x > right.x) && (this->y > right.y);
 		}
@@ -859,9 +854,9 @@ namespace bavil::math
 		/// <param name="v1">ベクトル1.</param>
 		/// <param name="v2">ベクトル2.</param>
 		/// <returns>要素2以下なら真を返す.</returns>
-		constexpr bool operator <= (const Vector2& right) const noexcept
+		constexpr bool operator<=(const Vector2& right) const noexcept
 		{
-			return	!(*this > right);
+			return !(*this > right);
 		}
 
 		/// <summary>
@@ -870,12 +865,13 @@ namespace bavil::math
 		/// <param name="v1">ベクトル1.</param>
 		/// <param name="v2">ベクトル2.</param>
 		/// <returns>要素2以上なら真を返す.</returns>
-		constexpr bool operator >= (const Vector2& right) const noexcept
+		constexpr bool operator>=(const Vector2& right) const noexcept
 		{
-			return	!(*this < right);
+			return !(*this < right);
 		}
-
 
 	}; //! struct Vector2
 
-}
+} // namespace bavil::math
+
+#pragma warning(pop)

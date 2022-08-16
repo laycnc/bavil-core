@@ -5,11 +5,9 @@
 namespace bavil
 {
 
-
 #define CONSTEXPR_CPP11 constexpr
 #define CONSTEXPR_CPP14 constexpr
-#define CONSTEXPR_CPP20 
-
+#define CONSTEXPR_CPP20
 
 	/// <summary>
 	/// 符号付き8ビット型.
@@ -17,7 +15,7 @@ namespace bavil
 	using s8 = std::int8_t;
 	/// <summary>
 	/// 符号付き816ット型.
-	/// </summary>	
+	/// </summary>
 	using s16 = std::int16_t;
 	/// <summary>
 	/// 符号付き32ビット型.
@@ -33,7 +31,7 @@ namespace bavil
 	using u8 = std::uint8_t;
 	/// <summary>
 	/// 符号なし16ビット型.
-	/// </summary>	
+	/// </summary>
 	using u16 = std::uint16_t;
 	/// <summary>
 	/// 符号なし32ビット型.
@@ -84,7 +82,7 @@ namespace bavil
 	/// </summary>
 	using byte4 = u32;
 
-	using uint_identifier = unsigned long long;
+	using uint_identifier     = unsigned long long;
 	using floating_identifier = long double;
 
 	/// <summary>
@@ -101,7 +99,6 @@ namespace bavil
 	/// </summary>
 	static constexpr u32 INVALID_VALUE = static_cast<u32>(-1);
 
-
 #if defined(GT_DEBUG)
 	/// <summary>
 	/// デバッグ時に例外を投げるかもしれない定数
@@ -114,19 +111,21 @@ namespace bavil
 	constexpr bool IS_DEVELOP_NOEXCEPT = true;
 #endif
 
-
 	namespace detail
 	{
-		struct none_init_holder {};
-		struct none_helper {};
+		struct NoneInitHolder
+		{
+		};
+		struct NoneHelper
+		{
+		};
 
-	} //! namespace detail
+	} // namespace detail
 
-
-	  /// <summary>
-	  /// 無効値型.
-	  /// </summary>
-	using none_t = bavil::detail::none_helper;
+	/// <summary>
+	/// 無効値型.
+	/// </summary>
+	using none_t = bavil::detail::NoneHelper;
 
 	/// <summary>
 	/// 無効値.
@@ -136,15 +135,13 @@ namespace bavil
 	/// <summary>
 	/// 初期化を明示的に行わない型.
 	/// </summary>
-	using none_init_t = bavil::detail::none_init_holder;
+	using none_init_t = bavil::detail::NoneInitHolder;
 
 	/// <summary>
 	/// 初期化を行わない定数.
 	/// </summary>
 	constexpr none_init_t none_init_v = {};
 
-
-} //! namespace gt
-
+} // namespace bavil
 
 /********** End of File ******************************************************/

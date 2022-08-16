@@ -17,10 +17,10 @@ namespace bavil::math
 	struct Matrix33
 	{
 		using value_type = f32;
-		using size_type = u32;
+		using size_type  = u32;
 	public:
 #pragma warning(push)
-#pragma warning(disable:4201) // 無名構造体・無名共有体の利用
+#pragma warning(disable : 4201) // 無名構造体・無名共有体の利用
 		union
 		{
 #if 0
@@ -48,7 +48,7 @@ namespace bavil::math
 			/// <summary>
 			/// ３行３列の行列.
 			/// </summary>
-			value_type	m[3][3];
+			value_type m[3][3];
 
 			/// <summary>
 			/// ３行３列の行列.
@@ -61,23 +61,19 @@ namespace bavil::math
 		/// <summary>
 		/// 単位行列.
 		/// </summary>
-		static const Matrix33& IDENTITY;
+		static const Matrix33 IDENTITY;
 		/// <summary>
 		/// 全てがゼロで初期化された行列.
 		/// </summary>
-		static const Matrix33& EMPTY;
+		static const Matrix33 EMPTY;
 	public:
 		/// <summary>
 		/// デフォルトコンストラクタ.
 		/// </summary>
 		Matrix33() noexcept
-			: Matrix33
+		    : Matrix33{1.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 1.f}
 		{
-			1.f, 0.f, 0.f,
-			0.f, 1.f, 0.f,
-			0.f, 0.f, 1.f
 		}
-		{}
 
 		/// <summary>
 		/// 初期化無しコンストラクタ.
@@ -89,11 +85,17 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="_array">配列.</param>
 		explicit Matrix33(value_type const* _array) noexcept
-			: Matrix33{
-			_array[0], _array[1], _array[2],
-			_array[3], _array[4], _array[5],
-			_array[6], _array[7], _array[8]
-		} {}
+		    : Matrix33{_array[0],
+		               _array[1],
+		               _array[2],
+		               _array[3],
+		               _array[4],
+		               _array[5],
+		               _array[6],
+		               _array[7],
+		               _array[8]}
+		{
+		}
 
 		/// <summary>
 		/// コンストラクタ.
@@ -107,11 +109,26 @@ namespace bavil::math
 		/// <param name="m31">3行1列成分</param>
 		/// <param name="m32">3行2列成分</param>
 		/// <param name="m33">3行3列成分</param>
-		Matrix33(value_type m11, value_type m12, value_type m13, value_type m21, value_type m22, value_type m23, value_type m31, value_type m32, value_type m33)
-			: _11{ m11 }, _12{ m12 }, _13{ m13 }
-			, _21{ m21 }, _22{ m22 }, _23{ m23 }
-			, _31{ m31 }, _32{ m32 }, _33{ m33 }
-		{}
+		Matrix33(value_type m11,
+		         value_type m12,
+		         value_type m13,
+		         value_type m21,
+		         value_type m22,
+		         value_type m23,
+		         value_type m31,
+		         value_type m32,
+		         value_type m33)
+		    : _11{m11}
+		    , _12{m12}
+		    , _13{m13}
+		    , _21{m21}
+		    , _22{m22}
+		    , _23{m23}
+		    , _31{m31}
+		    , _32{m32}
+		    , _33{m33}
+		{
+		}
 
 		/// <summary>
 		/// コンストラクタ.
@@ -121,12 +138,17 @@ namespace bavil::math
 		/// <param name="axisY">Y軸</param>
 		/// <param name="axisZ">Z軸</param>
 		Matrix33(const Vector3& axisX, const Vector3& axisY, const Vector3& axisZ)
-			: Matrix33{
-			axisX.x, axisX.y, axisX.z,
-			axisY.x, axisY.y, axisY.z,
-			axisZ.x, axisZ.y, axisZ.z
-		} {}
-
+		    : Matrix33{axisX.x,
+		               axisX.y,
+		               axisX.z,
+		               axisY.x,
+		               axisY.y,
+		               axisY.z,
+		               axisZ.x,
+		               axisZ.y,
+		               axisZ.z}
+		{
+		}
 
 		/// <summary>
 		/// 単位行列化する.
@@ -143,33 +165,31 @@ namespace bavil::math
 		/// <returns>逆行列化した行列の参照を返す.</returns>
 		Matrix33& inverse()
 		{
-			Matrix33 M;
+			Matrix33 m;
 
-			M._11 = this->_22 * this->_33 - this->_23 * this->_32;
-			M._12 = this->_13 * this->_32 - this->_12 * this->_33;
-			M._13 = this->_12 * this->_23 - this->_13 * this->_22;
-			M._21 = this->_23 * this->_31 - this->_21 * this->_33;
-			M._22 = this->_11 * this->_33 - this->_13 * this->_31;
-			M._23 = this->_13 * this->_21 - this->_11 * this->_23;
-			M._31 = this->_21 * this->_32 - this->_22 * this->_31;
-			M._32 = this->_12 * this->_31 - this->_11 * this->_32;
-			M._33 = this->_11 * this->_22 - this->_12 * this->_21;
+			m._11 = this->_22 * this->_33 - this->_23 * this->_32;
+			m._12 = this->_13 * this->_32 - this->_12 * this->_33;
+			m._13 = this->_12 * this->_23 - this->_13 * this->_22;
+			m._21 = this->_23 * this->_31 - this->_21 * this->_33;
+			m._22 = this->_11 * this->_33 - this->_13 * this->_31;
+			m._23 = this->_13 * this->_21 - this->_11 * this->_23;
+			m._31 = this->_21 * this->_32 - this->_22 * this->_31;
+			m._32 = this->_12 * this->_31 - this->_11 * this->_32;
+			m._33 = this->_11 * this->_22 - this->_12 * this->_21;
 
-			const value_type fDet = this->_11 * M._11
-				+ this->_12 * M._21
-				+ this->_13 * M._31;
+			const value_type fdet =
+			    this->_11 * m._11 + this->_12 * m._21 + this->_13 * m._31;
 
-			if (fDet == 0.0)
+			if ( fdet == 0.0 )
 			{
 				// 逆行列を求める事ができない.
 				return *this = Matrix33::IDENTITY;
 			}
 
-			value_type fInvDet = 1.0f / fDet;
-			M *= fInvDet;
+			value_type f_Inv_det = 1.0f / fdet;
+			m *= f_Inv_det;
 
-			return *this = M;
-
+			return *this = m;
 		}
 
 		/// <summary>
@@ -178,22 +198,22 @@ namespace bavil::math
 		/// <returns>転置行列化した行列の参照を返す.</returns>
 		Matrix33& transpose() noexcept
 		{
-			Matrix33 M;
+			Matrix33 m;
 
 			/* マトリクスの行と列を交換する */
-			M._11 = this->_11;
-			M._21 = this->_12;
-			M._31 = this->_13;
+			m._11 = this->_11;
+			m._21 = this->_12;
+			m._31 = this->_13;
 
-			M._12 = this->_21;
-			M._22 = this->_22;
-			M._32 = this->_23;
+			m._12 = this->_21;
+			m._22 = this->_22;
+			m._32 = this->_23;
 
-			M._13 = this->_31;
-			M._23 = this->_32;
-			M._33 = this->_33;
+			m._13 = this->_31;
+			m._23 = this->_32;
+			m._33 = this->_33;
 
-			*this = M;
+			*this = m;
 			return *this;
 		}
 
@@ -201,7 +221,7 @@ namespace bavil::math
 		/// 転置逆行列にする.
 		/// </summary>
 		/// <returns>転置逆行列化した行列の参照を返す.</returns>
-		Matrix33& inverseTranspose()
+		Matrix33& inverse_transpose()
 		{
 			return this->inverse().transpose();
 		}
@@ -210,7 +230,7 @@ namespace bavil::math
 		/// 逆行列を取得.
 		/// </summary>
 		/// <returns>逆行列を返す.</returns>
-		Matrix33 getInverse() const
+		Matrix33 get_inverse() const
 		{
 			return Matrix33(*this).inverse();
 		}
@@ -219,7 +239,7 @@ namespace bavil::math
 		/// 転置行列を取得.
 		/// </summary>
 		/// <returns>転置行列を返す.</returns>
-		Matrix33 getTranspose() const
+		Matrix33 get_transpose() const
 		{
 			return Matrix33(*this).transpose();
 		}
@@ -228,9 +248,9 @@ namespace bavil::math
 		/// 転置逆行列を取得.
 		/// </summary>
 		/// <returns>転置逆行列を返す.</returns>
-		Matrix33 getInverseTranspose() const
+		Matrix33 get_inverse_transpose() const
 		{
-			return Matrix33(*this).inverseTranspose();
+			return Matrix33(*this).inverse_transpose();
 		}
 
 		/// <summary>
@@ -240,9 +260,9 @@ namespace bavil::math
 		/// <param name="y">Y成分.</param>
 		/// <param name="z">Z成分.</param>
 		/// <returns>拡大後の行列の参照を返す.</returns>
-		Matrix33& scale(const value_type x, const value_type y, const value_type z)
+		Matrix33& scale(value_type x, value_type y, value_type z)
 		{
-			return *this *= Matrix33(none_init_v).setScale(x, y, z);
+			return *this *= Matrix33(none_init_v).set_scale(x, y, z);
 		}
 
 		/// <summary>
@@ -260,7 +280,7 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="scaleFactor">スケール値.</param>
 		/// <returns>拡大後の行列の参照を返す.</returns>
-		Matrix33& scale(const value_type scaleFactor)
+		Matrix33& scale(value_type scaleFactor)
 		{
 			return this->scale(scaleFactor, scaleFactor, scaleFactor);
 		}
@@ -273,9 +293,13 @@ namespace bavil::math
 		/// <param name="axisY">Y軸成分.</param>
 		/// <param name="axisZ">Z軸成分.</param>
 		/// <returns>回転後の行列を返す.</returns>
-		Matrix33& rotate(Radian radian, const value_type axisX, const value_type axisY, const value_type axisZ)
+		Matrix33& rotate(Radian     radian,
+		                 value_type axisX,
+		                 value_type axisY,
+		                 value_type axisZ)
 		{
-			return *this *= Matrix33(none_init_v).setRotation(radian, axisX, axisY, axisZ);
+			return *this *=
+			       Matrix33(none_init_v).set_rotation(radian, axisX, axisY, axisZ);
 		}
 
 		/// <summary>
@@ -304,9 +328,9 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="degree">角度.</param>
 		/// <returns>回転後の行列を返す.</returns>
-		Matrix33& rotateX(Radian radian) noexcept
+		Matrix33& rotate_x(Radian radian) noexcept
 		{
-			return *this *= Matrix33{ none_init_v }.setRotationX(radian);
+			return *this *= Matrix33{none_init_v}.set_rotation_x(radian);
 		}
 
 		/// <summary>
@@ -314,9 +338,9 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="degree">角度.</param>
 		/// <returns>回転後の行列を返す.</returns>
-		Matrix33& rotateY(Radian radian) noexcept
+		Matrix33& rotate_y(Radian radian) noexcept
 		{
-			return *this *= Matrix33{ none_init_v }.setRotationY(radian);
+			return *this *= Matrix33{none_init_v}.set_rotation_y(radian);
 		}
 
 		/// <summary>
@@ -324,9 +348,9 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="degree">角度.</param>
 		/// <returns>回転後の行列を返す.</returns>
-		Matrix33& rotateZ(Radian radian) noexcept
+		Matrix33& rotate_z(Radian radian) noexcept
 		{
-			return *this *= Matrix33{ none_init_v }.setRotationZ(radian);
+			return *this *= Matrix33{none_init_v}.set_rotation_z(radian);
 		}
 
 		/// <summary>
@@ -336,9 +360,12 @@ namespace bavil::math
 		/// <param name="pitch">ピッチ.</param>
 		/// <param name="roll">ロール.</param>
 		/// <returns>回転後の行列を返す.</returns>
-		Matrix33& rotateYawPitchRoll(Radian yaw, Radian pitch, Radian roll) noexcept
+		Matrix33& rotate_yaw_pitch_roll(Radian yaw,
+		                                Radian pitch,
+		                                Radian roll) noexcept
 		{
-			return *this *= Matrix33{ none_init_v }.setRotationYawPitchRoll(yaw, pitch, roll);
+			return *this *= Matrix33{none_init_v}.set_rotation_yaw_pitch_roll(
+			           yaw, pitch, roll);
 		}
 
 		/// <summary>
@@ -348,9 +375,8 @@ namespace bavil::math
 		/// <param name="y">Y成分.</param>
 		Matrix33& translate(value_type x, value_type y) noexcept
 		{
-			return *this *= Matrix33{ none_init_v }.setTranslation(x, y);
+			return *this *= Matrix33{none_init_v}.set_translation(x, y);
 		}
-
 
 		/// <summary>
 		/// 行列を平行移動.
@@ -367,7 +393,7 @@ namespace bavil::math
 		/// <param name="x">X成分.</param>
 		/// <param name="y">Y成分.</param>
 		/// <param name="z">Z成分.</param>
-		Matrix33& setScale(const value_type x, const value_type y, const value_type z)
+		Matrix33& set_scale(value_type x, value_type y, value_type z)
 		{
 			this->_11 = x;
 			this->_12 = 0.f;
@@ -387,18 +413,18 @@ namespace bavil::math
 		/// スケール値の設定.
 		/// </summary>
 		/// <param name="scaleFactor">スケール値.</param>
-		Matrix33& setScale(const Vector3& scaleFactor)
+		Matrix33& set_scale(const Vector3& scaleFactor)
 		{
-			return this->setScale(scaleFactor.x, scaleFactor.y, scaleFactor.z);
+			return this->set_scale(scaleFactor.x, scaleFactor.y, scaleFactor.z);
 		}
 
 		/// <summary>
 		/// スケール値の設定.
 		/// </summary>
 		/// <param name="scaleFactor">スケール値.</param>
-		Matrix33& setScale(const value_type scaleFactor)
+		Matrix33& set_scale(value_type scaleFactor)
 		{
-			return this->setScale(scaleFactor, scaleFactor, scaleFactor);
+			return this->set_scale(scaleFactor, scaleFactor, scaleFactor);
 		}
 
 		/// <summary>
@@ -408,33 +434,36 @@ namespace bavil::math
 		/// <param name="axisX">X軸.</param>
 		/// <param name="axisY">Y軸.</param>
 		/// <param name="axisZ">Z軸.</param>
-		Matrix33& setRotation(Radian radian, value_type axisX, value_type axisY, value_type axisZ)
+		Matrix33& set_rotation(Radian     radian,
+		                       value_type axisX,
+		                       value_type axisY,
+		                       value_type axisZ)
 		{
-			const value_type sinAngle = Sin(radian);
-			const value_type cosAngle = Cos(radian);
-			const value_type oneMinusCosAngle = 1.0f - cosAngle;
+			const value_type sin_angle           = Sin(radian);
+			const value_type cos_angle           = Cos(radian);
+			const value_type one_minus_cos_angle = 1.0f - cos_angle;
 
-			if (const value_type len = std::sqrt(axisX * axisX + axisY * axisY + axisZ * axisZ))
+			if ( const value_type len =
+			         std::sqrt(axisX * axisX + axisY * axisY + axisZ * axisZ) )
 			{
 				axisX *= (1.f / len);
 				axisY *= (1.f / len);
 				axisZ *= (1.f / len);
 			}
 
-			this->_11 = (axisX * axisX) + cosAngle * (1.0f - (axisX * axisX));
-			this->_21 = (axisX * axisY) * oneMinusCosAngle - sinAngle * axisZ;
-			this->_31 = (axisX * axisZ) * oneMinusCosAngle + sinAngle * axisY;
+			this->_11 = (axisX * axisX) + cos_angle * (1.0f - (axisX * axisX));
+			this->_21 = (axisX * axisY) * one_minus_cos_angle - sin_angle * axisZ;
+			this->_31 = (axisX * axisZ) * one_minus_cos_angle + sin_angle * axisY;
 
-			this->_12 = (axisX * axisY) * oneMinusCosAngle + sinAngle * axisZ;
-			this->_22 = (axisY * axisY) + cosAngle * (1.0f - (axisY * axisY));
-			this->_32 = (axisY * axisZ) * oneMinusCosAngle - sinAngle * axisX;
+			this->_12 = (axisX * axisY) * one_minus_cos_angle + sin_angle * axisZ;
+			this->_22 = (axisY * axisY) + cos_angle * (1.0f - (axisY * axisY));
+			this->_32 = (axisY * axisZ) * one_minus_cos_angle - sin_angle * axisX;
 
-			this->_13 = (axisX * axisZ) * oneMinusCosAngle - sinAngle * axisY;
-			this->_23 = (axisY * axisZ) * oneMinusCosAngle + sinAngle * axisX;
-			this->_33 = (axisZ * axisZ) + cosAngle * (1.0f - (axisZ * axisZ));
+			this->_13 = (axisX * axisZ) * one_minus_cos_angle - sin_angle * axisY;
+			this->_23 = (axisY * axisZ) * one_minus_cos_angle + sin_angle * axisX;
+			this->_33 = (axisZ * axisZ) + cos_angle * (1.0f - (axisZ * axisZ));
 
 			return *this;
-
 		}
 
 		/// <summary>
@@ -442,16 +471,16 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="radian">角度.</param>
 		/// <param name="axis">軸.</param>
-		Matrix33& setRotation(Radian radian, const Vector3& axis) noexcept
+		Matrix33& set_rotation(Radian radian, const Vector3& axis) noexcept
 		{
-			return this->setRotation(radian, axis.x, axis.y, axis.z);
+			return this->set_rotation(radian, axis.x, axis.y, axis.z);
 		}
 
 		/// <summary>
 		/// 回転角度の設定.
 		/// </summary>
 		/// <param name="q">クォータニオン.</param>
-		Matrix33& setRotation(const Quaternion& q)
+		Matrix33& set_rotation(const Quaternion& q)
 		{
 			return *this = Matrix33::Rotate(q);
 		}
@@ -460,7 +489,7 @@ namespace bavil::math
 		/// X軸の回転角度の設定.
 		/// </summary>
 		/// <param name="radian">角度.</param>
-		Matrix33& setRotationX(Radian radian) noexcept
+		Matrix33& set_rotation_x(Radian radian) noexcept
 		{
 			this->_11 = 1.0f;
 			this->_12 = 0.0f;
@@ -482,7 +511,7 @@ namespace bavil::math
 		/// Y軸の回転角度の設定.
 		/// </summary>
 		/// <param name="radian">角度.</param>
-		Matrix33& setRotationY(Radian radian) noexcept
+		Matrix33& set_rotation_y(Radian radian) noexcept
 		{
 			this->_12 = 0.0f;
 
@@ -504,7 +533,7 @@ namespace bavil::math
 		/// Z軸の回転角度の設定.
 		/// </summary>
 		/// <param name="radian">角度.</param>
-		Matrix33& setRotationZ(Radian radian) noexcept
+		Matrix33& set_rotation_z(Radian radian) noexcept
 		{
 			this->_13 = 0.0f;
 
@@ -528,18 +557,14 @@ namespace bavil::math
 		/// <param name="yaw">ヨー.</param>
 		/// <param name="pitch">ピッチ.</param>
 		/// <param name="roll">ロール.</param>
-		Matrix33& setRotationYawPitchRoll(Radian yaw, Radian pitch, Radian roll)
+		Matrix33& set_rotation_yaw_pitch_roll(Radian yaw, Radian pitch, Radian roll)
 		{
 			// ロール，ピッチ，ヨーから回転マトリクスを求める.
-			*this = Matrix33{ none_init_v }.setRotationZ(roll) *
-				Matrix33 {
-				none_init_v
-			}.setRotationX(pitch)*
-					Matrix33 {
-					none_init_v
-				}.setRotationY(yaw);
+			*this = Matrix33{none_init_v}.set_rotation_z(roll) *
+			        Matrix33{none_init_v}.set_rotation_x(pitch) *
+			        Matrix33{none_init_v}.set_rotation_y(yaw);
 
-					return *this;
+			return *this;
 		}
 
 		/// <summary>
@@ -547,7 +572,7 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="x">X成分.</param>
 		/// <param name="y">Y成分.</param>
-		Matrix33& setTranslation(const value_type x, const value_type y)
+		Matrix33& set_translation(value_type x, value_type y)
 		{
 			this->_11 = 1.f;
 			this->_12 = 0.f;
@@ -568,16 +593,16 @@ namespace bavil::math
 		/// 平行移動量の設定.
 		/// </summary>
 		/// <param name="translation">平行移動量.</param>
-		Matrix33& setTranslation(const Vector2& translation)
+		Matrix33& set_translation(const Vector2& translation)
 		{
-			return this->setTranslation(translation.x, translation.y);
+			return this->set_translation(translation.x, translation.y);
 		}
 
 		/// <summary>
 		/// X軸，位置の設定.
 		/// </summary>
 		/// <param name="axisX">X軸成分.</param>
-		Matrix33& setAxisX(const Vector3& axisX) noexcept
+		Matrix33& set_axis_x(const Vector3& axisX) noexcept
 		{
 			this->_11 = axisX.x;
 			this->_12 = axisX.y;
@@ -589,7 +614,7 @@ namespace bavil::math
 		/// Y軸，位置の設定.
 		/// </summary>
 		/// <param name="axisY">Y軸成分.</param>
-		Matrix33& setAxisY(const Vector3& axisY) noexcept
+		Matrix33& set_axis_y(const Vector3& axisY) noexcept
 		{
 			this->_21 = axisY.x;
 			this->_22 = axisY.y;
@@ -601,7 +626,7 @@ namespace bavil::math
 		/// Z軸，位置の設定.
 		/// </summary>
 		/// <param name="axisZ">Z軸成分.</param>
-		Matrix33& setAxisZ(const Vector3& axisZ) noexcept
+		Matrix33& set_axis_z(const Vector3& axisZ) noexcept
 		{
 			this->_31 = axisZ.x;
 			this->_32 = axisZ.y;
@@ -613,7 +638,7 @@ namespace bavil::math
 		/// 位置の設定.
 		/// </summary>
 		/// <param name="position">座標.</param>
-		void setPosition(const Vector2& position) noexcept
+		void set_position(const Vector2& position) noexcept
 		{
 			this->_31 = position.x;
 			this->_32 = position.y;
@@ -623,19 +648,18 @@ namespace bavil::math
 		/// 位置の設定.
 		/// </summary>
 		/// <param name="position">座標.</param>
-		void setPosition(const Vector3& position) noexcept
+		void set_position(const Vector3& position) noexcept
 		{
 			this->_31 = position.x;
 			this->_32 = position.y;
 			this->_33 = position.z;
 		}
 
-
 		/// <summary>
 		/// ロールの取得.
 		/// </summary>
 		/// <returns>ロール値を返す.</returns>
-		value_type getRoll() const noexcept
+		value_type get_roll() const noexcept
 		{
 			return std::atan2(this->_12, this->_22);
 		}
@@ -644,7 +668,7 @@ namespace bavil::math
 		/// ピッチの取得.
 		/// </summary>
 		/// <returns>ピッチ値を返す.</returns>
-		value_type getPitch() const noexcept
+		value_type get_pitch() const noexcept
 		{
 			return std::asin(-this->_32);
 		}
@@ -653,7 +677,7 @@ namespace bavil::math
 		/// ヨーを取得.
 		/// </summary>
 		/// <returns>ヨー値を返す.</returns>
-		value_type getYaw() const noexcept
+		value_type get_yaw() const noexcept
 		{
 			return std::atan2(this->_31, this->_33);
 		}
@@ -662,7 +686,7 @@ namespace bavil::math
 		/// X軸を取得.
 		/// </summary>
 		/// <returns>軸ベクトルを返す.</returns>
-		const Vector3& getAxisX() const noexcept
+		const Vector3& get_axis_x() const noexcept
 		{
 			return *reinterpret_cast<const Vector3*>(&this->_11);
 		}
@@ -671,7 +695,7 @@ namespace bavil::math
 		/// Y軸を取得.
 		/// </summary>
 		/// <returns>軸ベクトルを返す.</returns>
-		const Vector3& getAxisY() const noexcept
+		const Vector3& get_axis_y() const noexcept
 		{
 			return *reinterpret_cast<const Vector3*>(&this->_21);
 		}
@@ -680,7 +704,7 @@ namespace bavil::math
 		/// Z軸を取得.
 		/// </summary>
 		/// <returns>軸ベクトルを返す.</returns>
-		const Vector3& getAxisZ() const noexcept
+		const Vector3& get_axis_z() const noexcept
 		{
 			return *reinterpret_cast<const Vector3*>(&this->_31);
 		}
@@ -689,7 +713,7 @@ namespace bavil::math
 		/// 左方向のベクトルを取得.
 		/// </summary>
 		/// <returns>左方向を返す.</returns>
-		const Vector3& getLeft() const noexcept
+		const Vector3& get_left() const noexcept
 		{
 			return *reinterpret_cast<const Vector3*>(&this->_11);
 		}
@@ -698,7 +722,7 @@ namespace bavil::math
 		/// 上方向のベクトルを取得.
 		/// </summary>
 		/// <returns>上方向を返す.</returns>
-		const Vector3& getUp() const noexcept
+		const Vector3& get_up() const noexcept
 		{
 			return *reinterpret_cast<const Vector3*>(&this->_21);
 		}
@@ -707,7 +731,7 @@ namespace bavil::math
 		/// 前方向のベクトルを取得.
 		/// </summary>
 		/// <returns>前方向を返す.</returns>
-		const Vector3& getFront() const noexcept
+		const Vector3& get_front() const noexcept
 		{
 			return *reinterpret_cast<const Vector3*>(&this->_31);
 		}
@@ -716,7 +740,7 @@ namespace bavil::math
 		/// 位置を取得.
 		/// </summary>
 		/// <returns>位置を返す.</returns>
-		const Vector2& getPosition() const noexcept
+		const Vector2& get_position() const noexcept
 		{
 			return *reinterpret_cast<const Vector2*>(&this->_31);
 		}
@@ -728,11 +752,8 @@ namespace bavil::math
 		/// <returns>変換後の座標を返す.</returns>
 		Vector2 transform(const Vector2& target) const noexcept
 		{
-			return
-			{
-				target.x * this->_11 + target.y * this->_21 + this->_31,
-				target.x * this->_12 + target.y * this->_22 + this->_32
-			};
+			return {target.x * this->_11 + target.y * this->_21 + this->_31,
+			        target.x * this->_12 + target.y * this->_22 + this->_32};
 		}
 
 		/// <summary>
@@ -742,12 +763,12 @@ namespace bavil::math
 		/// <returns>変換後の座標を返す.</returns>
 		Vector3 transform(const Vector3& target) const noexcept
 		{
-			return
-			{
-				(this->_11 * target.x) + (this->_21 * target.y) + (this->_31 * target.z),
-				(this->_12 * target.x) + (this->_22 * target.y) + (this->_32 * target.z),
-				(this->_13 * target.x) + (this->_23 * target.y) + (this->_33 * target.z)
-			};
+			return {(this->_11 * target.x) + (this->_21 * target.y) +
+			            (this->_31 * target.z),
+			        (this->_12 * target.x) + (this->_22 * target.y) +
+			            (this->_32 * target.z),
+			        (this->_13 * target.x) + (this->_23 * target.y) +
+			            (this->_33 * target.z)};
 		}
 
 		/// <summary>
@@ -755,13 +776,10 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="v">変換する座標.</param>
 		/// <returns>変換後の座標を返す.</returns>
-		Vector2 transformNormal(const Vector2& target) const
+		Vector2 transform_normal(const Vector2& target) const
 		{
-			return
-			{
-				target.x * this->_11 + target.y * this->_21,
-				target.x * this->_12 + target.y * this->_22
-			};
+			return {target.x * this->_11 + target.y * this->_21,
+			        target.x * this->_12 + target.y * this->_22};
 		}
 
 		/// <summary>
@@ -770,7 +788,7 @@ namespace bavil::math
 		/// <returns>絶対値にした行列を返す.</returns>
 		Matrix33& abs()
 		{
-			for (auto& value : v)
+			for ( auto& value : v )
 			{
 				value = std::abs(value);
 			}
@@ -784,7 +802,7 @@ namespace bavil::math
 		/// <param name="translation">平行移動量.</param>
 		static Matrix33 Translation(const Vector2& translation)
 		{
-			return Matrix33{ none_init_v }.setTranslation(translation);
+			return Matrix33{none_init_v}.set_translation(translation);
 		}
 
 		/// <summary>
@@ -805,7 +823,7 @@ namespace bavil::math
 		/// <returns>作成した行列を返す.</returns>
 		static Matrix33 RotationX(Radian radian) noexcept
 		{
-			return Matrix33{ none_init_v }.setRotationX(radian);
+			return Matrix33{none_init_v}.set_rotation_x(radian);
 		}
 
 		/// <summary>
@@ -815,7 +833,7 @@ namespace bavil::math
 		/// <returns>作成した行列を返す.</returns>
 		static Matrix33 RotationY(Radian radian) noexcept
 		{
-			return Matrix33{ none_init_v }.setRotationY(radian);
+			return Matrix33{none_init_v}.set_rotation_y(radian);
 		}
 
 		/// <summary>
@@ -825,7 +843,7 @@ namespace bavil::math
 		/// <returns>作成した行列を返す.</returns>
 		static Matrix33 RotationZ(Radian radian) noexcept
 		{
-			return Matrix33{ none_init_v }.setRotationZ(radian);
+			return Matrix33{none_init_v}.set_rotation_z(radian);
 		}
 
 		/// <summary>
@@ -835,12 +853,7 @@ namespace bavil::math
 		/// <returns>作成した行列を返す.</returns>
 		static Matrix33 CrossMatrix(const Vector3& v) noexcept
 		{
-			return
-			{
-				0.0f, v.z, -v.y,
-				-v.z, 0.0f, v.x,
-				v.y, -v.x, 0.0f
-			};
+			return {0.0f, v.z, -v.y, -v.z, 0.0f, v.x, v.y, -v.x, 0.0f};
 		}
 
 		/// <summary>
@@ -850,14 +863,14 @@ namespace bavil::math
 		/// <returns>作成した行列を返す.</returns>
 		static Matrix33 Scaling(const Vector3& scaleFactor)
 		{
-			return Matrix33{ none_init_v }.setScale(scaleFactor);
+			return Matrix33{none_init_v}.set_scale(scaleFactor);
 		}
 	public:
 		/// <summary>
 		/// キャスト演算子オーバーロード.
 		/// </summary>
 		/// <returns>変換後のポインタを返す.</returns>
-		operator value_type* ()
+		operator value_type*()
 		{
 			return reinterpret_cast<value_type*>(this->v);
 		}
@@ -865,7 +878,7 @@ namespace bavil::math
 		/// キャスト演算子オーバーロード.
 		/// </summary>
 		/// <returns>変換後のポインタを返す.</returns>
-		operator const value_type* () const
+		operator const value_type*() const
 		{
 			return reinterpret_cast<value_type const*>(this->v);
 		}
@@ -873,18 +886,18 @@ namespace bavil::math
 		/// <summary>
 		/// 加算単項演算子オーバーロード.
 		/// </summary>
-		Matrix33 operator + () const
+		Matrix33 operator+() const
 		{
-			return Matrix33{ *this };
+			return Matrix33{*this};
 		}
 
 		/// <summary>
 		/// 減算演算子オーバーロード.
 		/// </summary>
-		Matrix33 operator - () const
+		Matrix33 operator-() const
 		{
-			Matrix33 result{ none_init_v };
-			for (size_type i = 0; i < 9; ++i)
+			Matrix33 result{none_init_v};
+			for ( size_type i = 0; i < 9; ++i )
 			{
 				result.v[i] = -this->v[i];
 			}
@@ -896,9 +909,9 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="other">代入相手行列.</param>
 		/// <returns>計算後の行列を返す.</returns>
-		Matrix33& operator += (const Matrix33& other)
+		Matrix33& operator+=(const Matrix33& other)
 		{
-			for (size_type i = 0; i < 9; ++i)
+			for ( size_type i = 0; i < 9; ++i )
 			{
 				this->v[i] += other.v[i];
 			}
@@ -910,9 +923,9 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="other">代入相手行列.</param>
 		/// <returns>計算後の行列を返す.</returns>
-		Matrix33& operator -= (const Matrix33& other)
+		Matrix33& operator-=(const Matrix33& other)
 		{
-			for (size_type i = 0; i < 9; ++i)
+			for ( size_type i = 0; i < 9; ++i )
 			{
 				this->v[i] -= other.v[i];
 			}
@@ -924,21 +937,21 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="other">代入相手行列.</param>
 		/// <returns>計算後の行列を返す.</returns>
-		Matrix33& operator *= (const Matrix33& other)
+		Matrix33& operator*=(const Matrix33& other)
 		{
-			Matrix33 M;
+			Matrix33 m;
 
-			for (int i = 0; i < 3; i++)
+			for ( int i = 0; i < 3; i++ )
 			{
-				for (int j = 0; j < 3; j++)
+				for ( int j = 0; j < 3; j++ )
 				{
-					M.m[i][j] = this->m[i][0] * other.m[0][j]
-						+ this->m[i][1] * other.m[1][j]
-						+ this->m[i][2] * other.m[2][j];
+					m.m[i][j] = this->m[i][0] * other.m[0][j] +
+					            this->m[i][1] * other.m[1][j] +
+					            this->m[i][2] * other.m[2][j];
 				}
 			}
 
-			*this = M;
+			*this = m;
 			return *this;
 		}
 
@@ -947,9 +960,9 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="other">代入相手行列.</param>
 		/// <returns>計算後の行列を返す.</returns>
-		Matrix33& operator *= (const value_type s)
+		Matrix33& operator*=(value_type s)
 		{
-			for (size_type i = 0; i < 9; ++i)
+			for ( size_type i = 0; i < 9; ++i )
 			{
 				this->v[i] *= s;
 			}
@@ -961,7 +974,7 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="other">代入相手行列.</param>
 		/// <returns>計算後の行列を返す.</returns>
-		Matrix33& operator /= (const value_type s)
+		Matrix33& operator/=(value_type s)
 		{
 			return *this *= (1.0f / s);
 		}
@@ -971,7 +984,7 @@ namespace bavil::math
 		/// 加算2項演算子オーバーロード.
 		/// </summary>
 		/// <returns>加算後の行列.</returns>
-		Matrix33 operator + (const Matrix33& right) const
+		Matrix33 operator+(const Matrix33& right) const
 		{
 			return Matrix33(*this) += right;
 		}
@@ -982,7 +995,7 @@ namespace bavil::math
 		/// <param name="m1">行列1.</param>
 		/// <param name="m2">行列2.</param>
 		/// <returns>減算後の行列.</returns>
-		Matrix33 operator - (const Matrix33 right) const
+		Matrix33 operator-(const Matrix33& right) const
 		{
 			return Matrix33(*this) -= right;
 		}
@@ -993,7 +1006,7 @@ namespace bavil::math
 		/// <param name="m1">行列1.</param>
 		/// <param name="m2">行列2.</param>
 		/// <returns>乗算後の行列.</returns>
-		Matrix33 operator * (const Matrix33& right) const
+		Matrix33 operator*(const Matrix33& right) const
 		{
 			return Matrix33(*this) *= right;
 		}
@@ -1004,7 +1017,7 @@ namespace bavil::math
 		/// <param name="m">行列.</param>
 		/// <param name="s">スカラー値.</param>
 		/// <returns>乗算後の行列.</returns>
-		Matrix33 operator * (value_type right) const
+		Matrix33 operator*(value_type right) const
 		{
 			return Matrix33(*this) *= right;
 		}
@@ -1015,7 +1028,7 @@ namespace bavil::math
 		/// <param name="m">行列.</param>
 		/// <param name="V">ベクトル.</param>
 		/// <returns>乗算後の行列.</returns>
-		Vector3 operator * (const Vector3& V) const
+		Vector3 operator*(const Vector3& V) const
 		{
 			return this->transform(V);
 		}
@@ -1026,7 +1039,7 @@ namespace bavil::math
 		/// <param name="s">スカラー値.</param>
 		/// <param name="m">行列.</param>
 		/// <returns>乗算後の行列.</returns>
-		friend Matrix33 operator * (const value_type left, const Matrix33& right) noexcept
+		friend Matrix33 operator*(value_type left, const Matrix33& right) noexcept
 		{
 			//return Matrix33{ right } *= left;
 			return right * left;
@@ -1037,11 +1050,12 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="right">右辺値.</param>
 		/// <returns>等しければ真を返す.</returns>
-		bool operator == (const Matrix33& right) const noexcept
+		bool operator==(const Matrix33& right) const noexcept
 		{
-			for (size_type i = 0; i < 9; ++i)
+			for ( size_type i = 0; i < 9; ++i )
 			{
-				if (this->v[i] != right.v[i]) return false;
+				if ( this->v[i] != right.v[i] )
+					return false;
 			}
 			return true;
 		}
@@ -1051,11 +1065,11 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="right">右辺値.</param>
 		/// <returns>等しくなければ真を返す.</returns>
-		bool operator != (const Matrix33& right) const noexcept
+		bool operator!=(const Matrix33& right) const noexcept
 		{
 			return !(*this == right);
 		}
 
 	}; //! struct Matrix33
 
-}
+} // namespace bavil::math

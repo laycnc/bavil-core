@@ -556,9 +556,9 @@ namespace bavil::math
 	/// <param name="angle">角度.</param>
 	inline Degree Degree::UnsignedNormalize(Degree degree) noexcept
 	{
-		constexpr Degree _zero = 0_deg;
+		constexpr Degree ZERO = 0_deg;
 		degree                 = Normalize(degree);
-		if ( degree < _zero )
+		if ( degree < ZERO )
 		{
 			return Degree(degree.m_value + 360.f);
 		}

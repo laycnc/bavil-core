@@ -7,41 +7,37 @@ namespace bavil::math
 	namespace
 	{
 
-		static constexpr f32 matrix33_identity[] =
-		{
-			1.0f, 0.0f, 0.0f,
-			0.0f, 1.0f, 0.0f,
-			0.0f, 0.0f, 1.0f
-		};
+		static constexpr f32 MATRIX33_IDENTITY[] =
+		    {1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f};
 
-		static constexpr f32 matrix33_empty[] =
-		{
-			0.0f, 0.0f, 0.0f,
-			0.0f, 0.0f, 0.0f,
-			0.0f, 0.0f, 0.0f
-		};
+		static constexpr f32 MATRIX33_EMPTY[] =
+		    {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
 
-	} //! namespace 
-
+	} // namespace
 
 	/// <summary>
 	/// 単位行列.
 	/// </summary>
-	const Matrix33& Matrix33::IDENTITY = *reinterpret_cast<const Matrix33*>(matrix33_identity);
+	const Matrix33 Matrix33::IDENTITY =
+	    *reinterpret_cast<const Matrix33*>(MATRIX33_IDENTITY);
 
 	/// <summary>
 	/// 全てがゼロで初期化された行列.
 	/// </summary>
-	const Matrix33& Matrix33::EMPTY = *reinterpret_cast<const Matrix33*>(matrix33_empty);
+	const Matrix33 Matrix33::EMPTY =
+	    *reinterpret_cast<const Matrix33*>(MATRIX33_EMPTY);
 
 	Matrix33 Matrix33::Rotate(Matrix44 const& mat)
 	{
-		return
-		{
-			mat.m[0][0], mat.m[0][1], mat.m[0][2],
-			mat.m[1][0], mat.m[1][1], mat.m[1][2],
-			mat.m[2][0], mat.m[2][1], mat.m[2][2]
-		};
+		return {mat.m[0][0],
+		        mat.m[0][1],
+		        mat.m[0][2],
+		        mat.m[1][0],
+		        mat.m[1][1],
+		        mat.m[1][2],
+		        mat.m[2][0],
+		        mat.m[2][1],
+		        mat.m[2][2]};
 	}
 
 	Matrix33 Matrix33::Rotate(const Quaternion& q)
@@ -56,12 +52,15 @@ namespace bavil::math
 		value_type wy = q.w * q.y * 2.0f;
 		value_type wz = q.w * q.z * 2.0f;
 
-		return
-		{
-			1.f - (yy + zz), xy + wz, xz - wy,
-			xy - wz, 1.f - (xx + zz), yz + wx,
-			xz + wy, yz - wx, 1.f - (xx + yy)
-		};
+		return {1.f - (yy + zz),
+		        xy + wz,
+		        xz - wy,
+		        xy - wz,
+		        1.f - (xx + zz),
+		        yz + wx,
+		        xz + wy,
+		        yz - wx,
+		        1.f - (xx + yy)};
 	}
 
-}
+} // namespace bavil::math

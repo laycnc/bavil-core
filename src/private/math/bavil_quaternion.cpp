@@ -8,55 +8,43 @@ namespace bavil::math
 	namespace
 	{
 
-		static constexpr f32 quaternion_identity[] =
-		{
-			0.f,
-			0.f,
-			0.f,
-			1.f
-		};
+		static constexpr f32 QUATERNION_IDENTITY[] = {0.f, 0.f, 0.f, 1.f};
 
+		static constexpr f32 QUATERNION_EMPTY[] = {0.f, 0.f, 0.f, 0.f};
 
-		static constexpr f32 quaternion_empty[] =
-		{
-			0.f,
-			0.f,
-			0.f,
-			0.f
-		};
-
-	} //! namespace 
-
+	} // namespace
 
 	/// <summary>
 	/// 単位クォータニオン.
 	/// </summary>
-	const Quaternion& Quaternion::IDENTITY = *reinterpret_cast<const Quaternion*>(quaternion_identity);
+	const Quaternion Quaternion::IDENTITY =
+	    *reinterpret_cast<const Quaternion*>(QUATERNION_IDENTITY);
 
 	/// <summary>
 	/// 全てがゼロで初期化されたクォータニオン.
 	/// </summary>
-	const Quaternion& Quaternion::EMPTY = *reinterpret_cast<const Quaternion*>(quaternion_empty);
+	const Quaternion Quaternion::EMPTY =
+	    *reinterpret_cast<const Quaternion*>(QUATERNION_EMPTY);
 
-	Quaternion& Quaternion::setMatrix(Matrix44 const& m)
+	Quaternion& Quaternion::set_matrix(Matrix44 const& m)
 	{
 		value_type tr = m.m[0][0] + m.m[1][1] + m.m[2][2] + m.m[3][3];
 
-		if (tr >= 1.0f)
+		if ( tr >= 1.0f )
 		{
-			value_type const fourD = 2.0f * std::sqrt(tr);
-			this->w = fourD / 4.0f;
-			this->x = (m.m[1][2] - m.m[2][1]) / fourD;
-			this->y = (m.m[2][0] - m.m[0][2]) / fourD;
-			this->z = (m.m[0][1] - m.m[1][0]) / fourD;
+			value_type const four_d = 2.0f * std::sqrt(tr);
+			this->w                 = four_d / 4.0f;
+			this->x                 = (m.m[1][2] - m.m[2][1]) / four_d;
+			this->y                 = (m.m[2][0] - m.m[0][2]) / four_d;
+			this->z                 = (m.m[0][1] - m.m[1][0]) / four_d;
 
 			return *this;
 		}
 
 		value_type qa[4];
-		int i, j, k;
+		int        i, j, k;
 
-		if (m.m[0][0] > m.m[1][1])
+		if ( m.m[0][0] > m.m[1][1] )
 		{
 			i = 0;
 		}
@@ -64,7 +52,7 @@ namespace bavil::math
 		{
 			i = 1;
 		}
-		if (m.m[2][2] > m.m[i][i])
+		if ( m.m[2][2] > m.m[i][i] )
 		{
 			i = 2;
 		}
@@ -74,20 +62,19 @@ namespace bavil::math
 
 		tr = m.m[i][i] - m.m[j][j] - m.m[k][k] + 1.0f;
 
-		value_type const fourD = 2.0f * std::sqrt(tr);
+		value_type const four_d = 2.0f * std::sqrt(tr);
 
-		qa[i] = fourD / 4.0f;
-		qa[j] = (m.m[j][i] + m.m[i][j]) / fourD;
-		qa[k] = (m.m[k][i] + m.m[i][k]) / fourD;
-		qa[3] = (m.m[j][k] - m.m[k][j]) / fourD;
+		qa[i] = four_d / 4.0f;
+		qa[j] = (m.m[j][i] + m.m[i][j]) / four_d;
+		qa[k] = (m.m[k][i] + m.m[i][k]) / four_d;
+		qa[3] = (m.m[j][k] - m.m[k][j]) / four_d;
 
 		this->x = qa[0];
 		this->y = qa[1];
 		this->z = qa[2];
 		this->w = qa[3];
 
-		return	*this;
-
+		return *this;
 	}
 
 	Matrix44 Quaternion::rotate() const noexcept
@@ -102,13 +89,22 @@ namespace bavil::math
 		value_type wy = this->w * this->y * 2.0f;
 		value_type wz = this->w * this->z * 2.0f;
 
-		return Matrix44
-		(
-			1.0f - yy - zz, xy + wz, xz - wy, 0.0f,
-			xy - wz, 1.0f - xx - zz, yz + wx, 0.0f,
-			xz + wy, yz - wx, 1.0f - xx - yy, 0.0f,
-			0.0f, 0.0f, 0.0f, 1.0f
-		);
+		return Matrix44(1.0f - yy - zz,
+		                xy + wz,
+		                xz - wy,
+		                0.0f,
+		                xy - wz,
+		                1.0f - xx - zz,
+		                yz + wx,
+		                0.0f,
+		                xz + wy,
+		                yz - wx,
+		                1.0f - xx - yy,
+		                0.0f,
+		                0.0f,
+		                0.0f,
+		                0.0f,
+		                1.0f);
 	}
 
 	Quaternion Quaternion::Rotation(Matrix33 const& m)
@@ -116,26 +112,22 @@ namespace bavil::math
 
 		value_type tr = m.m[0][0] + m.m[1][1] + m.m[2][2] + 1.0f;
 
-		if (tr >= 1.0f)
+		if ( tr >= 1.0f )
 		{
-			const value_type fourD = 2.0f * std::sqrt(tr);
+			const value_type four_d = 2.0f * std::sqrt(tr);
 
-			return
-			{
-				(m.m[1][2] - m.m[2][1]) / fourD,
-				(m.m[2][0] - m.m[0][2]) / fourD,
-				(m.m[0][1] - m.m[1][0]) / fourD,
-				fourD / 4.0f
-			};
+			return {(m.m[1][2] - m.m[2][1]) / four_d,
+			        (m.m[2][0] - m.m[0][2]) / four_d,
+			        (m.m[0][1] - m.m[1][0]) / four_d,
+			        four_d / 4.0f};
 		}
 
-		value_type		qa[4];
-		int			i, j, k;
+		value_type qa[4];
+		int        i, j, k;
 
 		i = (m.m[0][0] > m.m[1][1]) ? (0) : (1);
 
-
-		if (m.m[2][2] > m.m[i][i])
+		if ( m.m[2][2] > m.m[i][i] )
 		{
 			i = 2;
 		}
@@ -145,44 +137,35 @@ namespace bavil::math
 
 		tr = m.m[i][i] - m.m[j][j] - m.m[k][k] + 1.0f;
 
-		const value_type fourD = 2.0f * std::sqrt(tr);
+		const value_type four_d = 2.0f * std::sqrt(tr);
 
-		qa[i] = fourD / 4.0f;
-		qa[j] = (m.m[j][i] + m.m[i][j]) / fourD;
-		qa[k] = (m.m[k][i] + m.m[i][k]) / fourD;
-		qa[3] = (m.m[j][k] - m.m[k][j]) / fourD;
+		qa[i] = four_d / 4.0f;
+		qa[j] = (m.m[j][i] + m.m[i][j]) / four_d;
+		qa[k] = (m.m[k][i] + m.m[i][k]) / four_d;
+		qa[3] = (m.m[j][k] - m.m[k][j]) / four_d;
 
-		return
-		{
-			qa[0],
-			qa[1],
-			qa[2],
-			qa[3]
-		};
+		return {qa[0], qa[1], qa[2], qa[3]};
 	}
 
 	Quaternion Quaternion::Rotation(Matrix44 const& m)
 	{
 		value_type tr = m.m[0][0] + m.m[1][1] + m.m[2][2] + m.m[3][3];
-		if (tr >= 1.0f)
+		if ( tr >= 1.0f )
 		{
-			const value_type fourD = 2.0f * std::sqrt(tr);
-			return
-			{
-				(m.m[1][2] - m.m[2][1]) / fourD,
-				(m.m[2][0] - m.m[0][2]) / fourD,
-				(m.m[0][1] - m.m[1][0]) / fourD,
-				fourD / 4.0f
-			};
+			const value_type four_d = 2.0f * std::sqrt(tr);
+			return {(m.m[1][2] - m.m[2][1]) / four_d,
+			        (m.m[2][0] - m.m[0][2]) / four_d,
+			        (m.m[0][1] - m.m[1][0]) / four_d,
+			        four_d / 4.0f};
 		}
 
 		int i = 0;
 
-		if (m.m[0][0] <= m.m[1][1])
+		if ( m.m[0][0] <= m.m[1][1] )
 		{
 			i = 1;
 		}
-		if (m.m[2][2] > m.m[i][i])
+		if ( m.m[2][2] > m.m[i][i] )
 		{
 			i = 2;
 		}
@@ -192,21 +175,15 @@ namespace bavil::math
 
 		tr = m.m[i][i] - m.m[j][j] - m.m[k][k] + 1.0f;
 
-		value_type fourD = 2.0f * std::sqrt(tr);
+		value_type four_d = 2.0f * std::sqrt(tr);
 		value_type qa[4];
 
-		qa[i] = fourD / 4.0f;
-		qa[j] = (m.m[j][i] + m.m[i][j]) / fourD;
-		qa[k] = (m.m[k][i] + m.m[i][k]) / fourD;
-		qa[3] = (m.m[j][k] - m.m[k][j]) / fourD;
+		qa[i] = four_d / 4.0f;
+		qa[j] = (m.m[j][i] + m.m[i][j]) / four_d;
+		qa[k] = (m.m[k][i] + m.m[i][k]) / four_d;
+		qa[3] = (m.m[j][k] - m.m[k][j]) / four_d;
 
-		return
-		{
-			qa[0],
-			qa[1],
-			qa[2],
-			qa[3]
-		};
+		return {qa[0], qa[1], qa[2], qa[3]};
 	}
 
 	Matrix44 Quaternion::Rotate(const Vector3& axis, Radian angle)
@@ -214,4 +191,4 @@ namespace bavil::math
 		return Quaternion(axis, angle).rotate();
 	}
 
-}
+} // namespace bavil::math

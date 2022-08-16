@@ -7,35 +7,35 @@ namespace bavil::math
 
 	namespace
 	{
-		constexpr Vector3 vector3_zero =
+		constexpr Vector3 VECTOR3_ZERO =
 		{
 			0.f,
 			0.f,
 			0.f
 		};
 
-		constexpr Vector3 vector3_one =
+		constexpr Vector3 VECTOR3_ONE =
 		{
 			1.f,
 			1.f,
 			1.f
 		};
 
-		constexpr Vector3 vector3_unit_x =
+		constexpr Vector3 VECTOR3_UNIT_X =
 		{
 			1.f,
 			0.f,
 			0.f
 		};
 
-		constexpr Vector3 vector3_unit_y =
+		constexpr Vector3 VECTOR3_UNIT_Y =
 		{
 			0.f,
 			1.f,
 			0.f
 		};
 
-		constexpr Vector3 vector3_unit_z =
+		constexpr Vector3 VECTOR3_UNIT_Z =
 		{
 			0.f,
 			0.f,
@@ -48,23 +48,23 @@ namespace bavil::math
 	/// <summary>
 	/// 全ての要素がゼロに設定された2次元ベクトル.
 	/// </summary>
-	const Vector3 Vector3::ZERO = vector3_zero;
+	const Vector3 Vector3::ZERO = VECTOR3_ZERO;
 	/// <summary>
 	/// 全ての要素が1に設定された2次元ベクトル.
 	/// </summary>
-	const Vector3 Vector3::ONE = vector3_one;
+	const Vector3 Vector3::ONE = VECTOR3_ONE;
 	/// <summary>
 	/// X軸のみ1に設定された2次元ベクトル.
 	/// </summary>
-	const Vector3 Vector3::UNIT_X = vector3_unit_x;
+	const Vector3 Vector3::UNIT_X = VECTOR3_UNIT_X;
 	/// <summary>
 	/// Y軸のみ1に設定された2次元ベクトル.
 	/// </summary>
-	const Vector3 Vector3::UNIT_Y = vector3_unit_y;
+	const Vector3 Vector3::UNIT_Y = VECTOR3_UNIT_Y;
 	/// <summary>
 	/// Z軸のみ1に設定された2次元ベクトル.
 	/// </summary>
-	const Vector3 Vector3::UNIT_Z = vector3_unit_z;
+	const Vector3 Vector3::UNIT_Z = VECTOR3_UNIT_Z;
 
 	Vector3 Vector3::Transform(const Vector3& v, const Matrix44& M)
 	{

@@ -7,6 +7,8 @@
 #include "math/bavil_math_def.h"
 #include "math/bavil_vector2.h"
 
+#pragma warning(push)
+#pragma warning(disable : 4201)
 
 namespace bavil::math
 {
@@ -19,11 +21,11 @@ namespace bavil::math
 	/// </summary>
 	struct Vector3
 	{
-		using vector2_type = Vector2;
-		using matrix44_type = Matrix44;
-		using value_type = f32;
+		using vector2_type     = Vector2;
+		using matrix44_type    = Matrix44;
+		using value_type       = f32;
 		using value_array_type = f32[3];
-		using size_type = u32;
+		using size_type        = u32;
 	public:
 #if __cpp_constexpr >= 201304
 		union
@@ -34,15 +36,15 @@ namespace bavil::math
 				/// <summary>
 				/// X成分.
 				/// </summary>
-				value_type	x;
+				value_type x;
 				/// <summary>
 				/// Y成分.
 				/// </summary>
-				value_type	y;
+				value_type y;
 				/// <summary>
 				/// Z成分.
 				/// </summary>
-				value_type	z;
+				value_type z;
 #if __cpp_constexpr >= 201304
 			};
 			value_array_type v;
@@ -79,7 +81,9 @@ namespace bavil::math
 		/// デフォルトコンストラクタ.
 		/// </summary>
 		constexpr Vector3() noexcept
-			: x{}, y{}, z{}
+		    : x{}
+		    , y{}
+		    , z{}
 		{
 		}
 
@@ -96,20 +100,24 @@ namespace bavil::math
 		/// コンストラクタ.
 		/// </summary>
 		/// <remarks>初期化</remarks>
-		/// <param name="v">XYZ成分.</param>
-		constexpr explicit Vector3(const value_type v) noexcept
-			: x{ v }, y{ v }, z{ v }
+		/// <param name="_v">XYZ成分.</param>
+		constexpr explicit Vector3(const value_type _v) noexcept
+		    : x{_v}
+		    , y{_v}
+		    , z{_v}
 		{
 		}
 
 		/// <summary>
 		/// コンストラクタ.
 		/// </summary>
-		/// <param name="X">X成分</param>
-		/// <param name="Y">Y成分</param>
-		/// <param name="Z">Z成分</param>
-		constexpr Vector3(value_type X, value_type Y, value_type Z) noexcept
-			: x{ X }, y{ Y }, z{ Z }
+		/// <param name="_x">X成分</param>
+		/// <param name="_y">Y成分</param>
+		/// <param name="_z">Z成分</param>
+		constexpr Vector3(value_type _x, value_type _y, value_type _z) noexcept
+		    : x{_x}
+		    , y{_y}
+		    , z{_z}
 		{
 		}
 
@@ -119,7 +127,9 @@ namespace bavil::math
 		/// <param name="xy">XY成分.</param>
 		/// <param name="z">Z成分.</param>
 		constexpr Vector3(Vector2& xy, value_type z) noexcept
-			: x{ xy.x }, y{ xy.y }, z{ z }
+		    : x{xy.x}
+		    , y{xy.y}
+		    , z{z}
 		{
 		}
 
@@ -128,10 +138,11 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="V">成分の配列</param>
 		constexpr Vector3(const value_type* V) noexcept
-			: x{ V[0] }, y{ V[1] }, z{ V[2] }
+		    : x{V[0]}
+		    , y{V[1]}
+		    , z{V[2]}
 		{
 		}
-
 
 		/// <summary>
 		/// コピーコンストラクタ.
@@ -145,14 +156,13 @@ namespace bavil::math
 		~Vector3() noexcept = default;
 
 	public:
-
 		/// <summary>
 		/// ノルムを求める.
 		/// </summary>
 		/// <returns>ノルムを返す.</returns>
 		value_type length() const noexcept
 		{
-			return std::sqrt(this->lengthSqr());
+			return std::sqrt(this->length_sqr());
 		}
 
 		/// <summary>
@@ -161,7 +171,7 @@ namespace bavil::math
 		/// <para>2乗和のみで平方根をとらない.</para>
 		/// </summary>
 		/// <returns>ノルムを返す.</returns>
-		constexpr value_type lengthSqr() const noexcept
+		constexpr value_type length_sqr() const noexcept
 		{
 			//return this->dot(*this);
 			return (this->x * this->x + this->y * this->y + this->z * this->z);
@@ -173,14 +183,14 @@ namespace bavil::math
 		/// <returns>正規化したベクトルを返す.</returns>
 		Vector3& normalize() noexcept
 		{
-			return *this /= std::sqrt(this->lengthSqr());
+			return *this /= std::sqrt(this->length_sqr());
 		}
 
 		/// <summary>
 		/// 正規化したベクトルを返す.
 		/// </summary>
 		/// <returns>正規化したベクトルを返す.</returns>
-		Vector3 getNormalize() const& noexcept
+		Vector3 get_normalize() const& noexcept
 		{
 			return Vector3(*this).normalize();
 		}
@@ -189,7 +199,7 @@ namespace bavil::math
 		/// 正規化したベクトルを返す.
 		/// </summary>
 		/// <returns>正規化したベクトルを返す.</returns>
-		Vector3&& getNormalize() && noexcept
+		Vector3&& get_normalize() && noexcept
 		{
 			return std::move(this->normalize());
 		}
@@ -198,9 +208,9 @@ namespace bavil::math
 		/// 安全に正規化する.
 		/// </summary>
 		/// <returns>正規化したベクトルを返す.</returns>
-		Vector3& safeNormalize() noexcept
+		Vector3& safe_normalize() noexcept
 		{
-			if (const value_type len = this->lengthSqr())
+			if ( const value_type len = this->length_sqr() )
 			{
 				return *this /= std::sqrt(len);
 			}
@@ -211,18 +221,18 @@ namespace bavil::math
 		/// 正規化したベクトルを返す.
 		/// </summary>
 		/// <returns>正規化したベクトルを返す.</returns>
-		Vector3 getSafeNormalize() const& noexcept
+		Vector3 get_safe_normalize() const& noexcept
 		{
-			return Vector3(*this).safeNormalize();
+			return Vector3(*this).safe_normalize();
 		}
 
 		/// <summary>
 		/// 正規化したベクトルを返す.
 		/// </summary>
 		/// <returns>正規化したベクトルを返す.</returns>
-		Vector3&& getSafeNormalize() && noexcept
+		Vector3&& get_safe_normalize() && noexcept
 		{
-			return std::move(this->safeNormalize());
+			return std::move(this->safe_normalize());
 		}
 
 		/// <summary>
@@ -242,12 +252,9 @@ namespace bavil::math
 		/// <returns>外積を返す.</returns>
 		constexpr Vector3 cross(const Vector3& V) const noexcept
 		{
-			return
-			{
-				this->y * V.z - this->z * V.y,
-				this->z * V.x - this->x * V.z,
-				this->x * V.y - this->y * V.x
-			};
+			return {this->y * V.z - this->z * V.y,
+			        this->z * V.x - this->x * V.z,
+			        this->x * V.y - this->y * V.x};
 		}
 
 		/// <summary>
@@ -256,12 +263,9 @@ namespace bavil::math
 		/// <param name="other">もう一つの要素</param>
 		Vector3 minimize(const Vector3& other) const
 		{
-			return
-			{
-				(std::min)(this->x, other.x),
-				(std::min)(this->y, other.y),
-				(std::min)(this->z, other.z)
-			};
+			return {(std::min)(this->x, other.x),
+			        (std::min)(this->y, other.y),
+			        (std::min)(this->z, other.z)};
 		}
 
 		/// <summary>
@@ -270,12 +274,9 @@ namespace bavil::math
 		/// <param name="other">もう一つの要素</param>
 		Vector3 maximize(const Vector3& other) const
 		{
-			return
-			{
-				(std::max)(this->x, other.x),
-				(std::max)(this->y, other.y),
-				(std::max)(this->z, other.z)
-			};
+			return {(std::max)(this->x, other.x),
+			        (std::max)(this->y, other.y),
+			        (std::max)(this->z, other.z)};
 		}
 
 		/// <summary>
@@ -294,19 +295,18 @@ namespace bavil::math
 		/// 絶対値ベクトルを求める.
 		/// </summary>
 		/// <returns>絶対値ベクトルを返す.</returns>
-		Vector3 getAbs() const noexcept
+		Vector3 get_abs() const noexcept
 		{
 			return std::move(Vector3(*this).abs());
 		}
-
 
 		/// <summary>
 		/// 3次元ベクトルのピッチを求める.
 		/// </summary>
 		/// <returns>ピッチを返す.</returns>
-		value_type getPitch() const noexcept
+		value_type get_pitch() const noexcept
 		{
-			if (const value_type len = this->length())
+			if ( const value_type len = this->length() )
 			{
 				return std::asin(-this->y / std::sqrt(len));
 			}
@@ -317,9 +317,9 @@ namespace bavil::math
 		/// 3次元ベクトルのヨーを求める.
 		/// </summary>
 		/// <returns>ヨーを返す.</returns>
-		value_type getYaw() const
+		value_type get_yaw() const
 		{
-			if (this->length() == static_cast<value_type>(0.0))
+			if ( this->length() == static_cast<value_type>(0.0) )
 			{
 				return static_cast<value_type>(0.0);
 			}
@@ -332,15 +332,15 @@ namespace bavil::math
 		/// <param name="pElevation">[out]仰角.</param>
 		/// <param name="pDirection">[out]方位角.</param>
 		/// <param name="V">ベクトル.</param>
-		void toEleDir(value_type* pElevation, value_type* pDirection) const
+		void to_ele_dir(value_type* pElevation, value_type* pDirection) const
 		{
-			if (pElevation)
+			if ( pElevation )
 			{
-				*pElevation = this->getPitch();
+				*pElevation = this->get_pitch();
 			}
-			if (pDirection)
+			if ( pDirection )
 			{
-				*pDirection = this->getYaw();
+				*pDirection = this->get_yaw();
 			}
 		}
 
@@ -348,7 +348,7 @@ namespace bavil::math
 		/// 2次元ベクトル型に変換する.
 		/// </summary>
 		/// <returns>参照を返す.</returns>
-		const Vector2& toVector2() const noexcept
+		const Vector2& to_vector2() const noexcept
 		{
 			return reinterpret_cast<const Vector2&>(*this);
 		}
@@ -362,7 +362,7 @@ namespace bavil::math
 		{
 #if __cpp_constexpr >= 201304
 			return std::begin(this->v);
-#else //! __cpp_constexpr >= 201304
+#else  //! __cpp_constexpr >= 201304
 			return gt::begin(reinterpret_cast<value_array_type&>(*this));
 #endif //! __cpp_constexpr >= 201304
 		}
@@ -374,7 +374,7 @@ namespace bavil::math
 		{
 #if __cpp_constexpr >= 201304
 			return std::begin(this->v);
-#else //! __cpp_constexpr >= 201304
+#else  //! __cpp_constexpr >= 201304
 			return gt::begin(reinterpret_cast<const value_array_type&>(*this));
 #endif //! __cpp_constexpr >= 201304
 		}
@@ -385,7 +385,7 @@ namespace bavil::math
 		{
 #if __cpp_constexpr >= 201304
 			return std::end(this->v);
-#else //! __cpp_constexpr >= 201304
+#else  //! __cpp_constexpr >= 201304
 			return gt::end(reinterpret_cast<value_array_type&>(*this));
 #endif //! __cpp_constexpr >= 201304
 		}
@@ -397,7 +397,7 @@ namespace bavil::math
 		{
 #if __cpp_constexpr >= 201304
 			return std::end(this->v);
-#else //! __cpp_constexpr >= 201304
+#else  //! __cpp_constexpr >= 201304
 			return gt::end(reinterpret_cast<const value_array_type&>(*this));
 #endif //! __cpp_constexpr >= 201304
 		}
@@ -423,7 +423,7 @@ namespace bavil::math
 		/// <returns>距離を返す.</returns>
 		static value_type DistanceSqr(const Vector3& my, const Vector3& target)
 		{
-			return (target - my).lengthSqr();
+			return (target - my).length_sqr();
 		}
 
 		/// <summary>
@@ -432,9 +432,11 @@ namespace bavil::math
 		/// <param name="my">自身の座標.</param>
 		/// <param name="target">ターゲット座標.</param>
 		/// <returns>移動量を返す.</returns>
-		static Vector3 Velocity(const Vector3& my, const Vector3& target, const value_type speed = 1.0)
+		static Vector3 Velocity(const Vector3& my,
+		                        const Vector3& target,
+		                        value_type     speed = 1.0)
 		{
-			return (target - my).getNormalize() * speed;
+			return (target - my).get_normalize() * speed;
 		}
 
 		/// <summary>
@@ -467,17 +469,21 @@ namespace bavil::math
 		/// <param name="vN">法線ベクトル.</param>
 		/// <param name="eta">屈折率比.</param>
 		/// <returns>反射ベクトル.</returns>
-		static Vector3 Refraction(const Vector3& vIn, const Vector3& vN, const value_type eta)
+		static Vector3 Refraction(const Vector3& vIn,
+		                          const Vector3& vN,
+		                          value_type     eta)
 		{
-			const value_type cosI = vN.dot(-vIn);
-			const value_type cosT2 = static_cast<value_type>(1.0) - eta * eta * (static_cast<value_type>(1.0) - cosI * cosI);
+			const value_type cos_i = vN.dot(-vIn);
+			const value_type cos_t2 =
+			    static_cast<value_type>(1.0) -
+			    eta * eta * (static_cast<value_type>(1.0) - cos_i * cos_i);
 
-			if (cosT2 <= static_cast<value_type>(0.0))
+			if ( cos_t2 <= static_cast<value_type>(0.0) )
 			{
 				return Vector3::ZERO;
 			}
 
-			return (vIn * eta) + vN * (eta * cosI - std::sqrt(std::abs(cosT2)));
+			return (vIn * eta) + vN * (eta * cos_i - std::sqrt(std::abs(cos_t2)));
 		}
 
 		/// <summary>
@@ -487,12 +493,7 @@ namespace bavil::math
 		/// <param name="yaw">ヨー.<para>Y軸まわりの回転角度</para></param>
 		static Vector3 FromPitchYaw(Radian pitch, Radian yaw) noexcept
 		{
-			return
-			{
-				Cos(pitch) * Sin(yaw),
-				-Sin(pitch),
-				Cos(pitch) * Cos(yaw)
-			};
+			return {Cos(pitch) * Sin(yaw), -Sin(pitch), Cos(pitch) * Cos(yaw)};
 		}
 
 		/// <summary>
@@ -501,14 +502,11 @@ namespace bavil::math
 		/// <param name="p">3Dベクトル.</param>
 		/// <param name="v">3Dベクトル.</param>
 		/// <param name="t">係数.</param>
-		static Vector3 LinearEquation(const Vector3& p, const Vector3& v, const value_type t)
+		static Vector3 LinearEquation(const Vector3& p,
+		                              const Vector3& v,
+		                              value_type     t)
 		{
-			return
-			{
-				v.x * t + p.x,
-				v.y * t + p.y,
-				v.z * t + p.z
-			};
+			return {v.x * t + p.x, v.y * t + p.y, v.z * t + p.z};
 		}
 
 		/// <summary>
@@ -529,7 +527,7 @@ namespace bavil::math
 
 		/// <summary>
 		/// 法線ベクトルの座標変換を行う.
-		/// </summary>		
+		/// </summary>
 		/// <param name="v">変換前のベクトル.</param>
 		/// <param name="M">座標変換行列.</param>
 		/// <returns>変換後のベクトル.</returns>
@@ -542,30 +540,32 @@ namespace bavil::math
 		/// <param name="V1">三角形の頂点座標1.</param>
 		/// <param name="V2">三角形の頂点座標2.</param>
 		/// <returns>法線ベクトル.</returns>
-		static Vector3 CalculateNormal(const Vector3& V0, const Vector3& V1, const Vector3& V2)
+		static Vector3 CalculateNormal(const Vector3& V0,
+		                               const Vector3& V1,
+		                               const Vector3& V2)
 		{
 			/* ３角形の頂点からベクトルを求める */
-			Vector3 _V1 = V0 - V1;
-			Vector3 _V2 = V1 - V2;
+			Vector3 v1 = V0 - V1;
+			Vector3 v2 = V1 - V2;
 
 			/* ２つのベクトルの外積を求める */
 			/* ベクトルのを正規化する */
-			return	_V1.cross(_V2).normalize();
+			return v1.cross(v2).normalize();
 		}
 
 	public:
 		/// <summary>
 		/// 加算単行演算子オーバーロード.
 		/// </summary>
-		constexpr Vector3 operator + () const& noexcept
+		constexpr Vector3 operator+() const& noexcept
 		{
-			return Vector3{ *this };
+			return Vector3{*this};
 		}
 
 		/// <summary>
 		/// 加算単行演算子オーバーロード.
 		/// </summary>
-		Vector3&& operator + ()&&
+		Vector3&& operator+() &&
 		{
 			return std::move(*this);
 		}
@@ -573,20 +573,15 @@ namespace bavil::math
 		/// <summary>
 		/// 減算単行演算子オーバーロード.
 		/// </summary>
-		constexpr Vector3 operator - () const& noexcept
+		constexpr Vector3 operator-() const& noexcept
 		{
-			return
-			{
-				-this->x,
-				-this->y,
-				-this->z
-			};
+			return {-this->x, -this->y, -this->z};
 		}
 
 		/// <summary>
 		/// 減算単行演算子オーバーロード.
 		/// </summary>
-		Vector3&& operator - () && noexcept
+		Vector3&& operator-() && noexcept
 		{
 			this->x = -this->x;
 			this->y = -this->y;
@@ -598,11 +593,11 @@ namespace bavil::math
 		/// キャスト演算子オーバーロード.
 		/// </summary>
 		/// <returns>キャスト後のポインタを返す.</returns>
-		CONSTEXPR_CPP14 operator value_type* () noexcept
+		CONSTEXPR_CPP14 operator value_type*() noexcept
 		{
 #if __cpp_constexpr >= 201304
 			return this->v;
-#else //! __cpp_constexpr >= 201304
+#else  //! __cpp_constexpr >= 201304
 			return reinterpret_cast<value_type*>(this);
 #endif //! __cpp_constexpr >= 201304
 		}
@@ -611,11 +606,11 @@ namespace bavil::math
 		/// キャスト演算子オーバーロード.
 		/// </summary>
 		/// <returns>キャスト後のポインタを返す.</returns>
-		constexpr operator value_type const* () const noexcept
+		constexpr operator value_type const*() const noexcept
 		{
 #if __cpp_constexpr >= 201304
 			return this->v;
-#else //! __cpp_constexpr >= 201304
+#else  //! __cpp_constexpr >= 201304
 			return reinterpret_cast<const value_type*>(this);
 #endif //! __cpp_constexpr >= 201304
 		}
@@ -625,7 +620,7 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="V">加算相手ベクトル.</param>
 		/// <returns>計算後のベクトル.</returns>
-		Vector3& operator += (const Vector3& V) noexcept
+		Vector3& operator+=(const Vector3& V) noexcept
 		{
 			this->x += V.x;
 			this->y += V.y;
@@ -638,7 +633,7 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="V">減算相手ベクトル.</param>
 		/// <returns>計算後のベクトル.</returns>
-		Vector3& operator -= (const Vector3& V) noexcept
+		Vector3& operator-=(const Vector3& V) noexcept
 		{
 			this->x -= V.x;
 			this->y -= V.y;
@@ -651,7 +646,7 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="s">スカラー値.</param>
 		/// <returns>計算後のベクトル.</returns>
-		Vector3& operator *= (const value_type s) noexcept
+		Vector3& operator*=(value_type s) noexcept
 		{
 			this->x *= s;
 			this->y *= s;
@@ -664,7 +659,7 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="V">乗算相手ベクトル.</param>
 		/// <returns>計算後のベクトル.</returns>
-		Vector3& operator *= (const Vector3& V) noexcept
+		Vector3& operator*=(const Vector3& V) noexcept
 		{
 			this->x *= V.x;
 			this->y *= V.y;
@@ -677,7 +672,7 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="s">スカラー値.</param>
 		/// <returns>計算後のベクトル.</returns>
-		Vector3& operator /= (const value_type s)
+		Vector3& operator/=(value_type s)
 		{
 			return *this *= static_cast<value_type>(1.0) / s;
 		}
@@ -687,7 +682,7 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="V">除算相手ベクトル.</param>
 		/// <returns>計算後のベクトル.</returns>
-		Vector3& operator /= (const Vector3& V)
+		Vector3& operator/=(const Vector3& V)
 		{
 			this->x *= static_cast<value_type>(1.0) / V.x;
 			this->y *= static_cast<value_type>(1.0) / V.y;
@@ -700,14 +695,9 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="right">右辺1.</param>
 		/// <returns>計算後のベクトル.</returns>
-		constexpr Vector3 operator + (const Vector3& right) const& noexcept
+		constexpr Vector3 operator+(const Vector3& right) const& noexcept
 		{
-			return
-			{
-				this->x + right.x,
-				this->y + right.y,
-				this->z + right.z
-			};
+			return {this->x + right.x, this->y + right.y, this->z + right.z};
 		}
 
 		/// <summary>
@@ -715,7 +705,7 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="right">右辺1.</param>
 		/// <returns>計算後のベクトル.</returns>
-		Vector3&& operator + (const Vector3& right) && noexcept
+		Vector3&& operator+(const Vector3& right) && noexcept
 		{
 			return std::move(*this += right);
 		}
@@ -725,14 +715,9 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="right">右辺.</param>
 		/// <returns>計算後のベクトル.</returns>
-		Vector3 operator - (const Vector3& right) const& noexcept
+		Vector3 operator-(const Vector3& right) const& noexcept
 		{
-			return
-			{
-				this->x - right.x,
-				this->y - right.y,
-				this->z - right.z
-			};
+			return {this->x - right.x, this->y - right.y, this->z - right.z};
 		}
 
 		/// <summary>
@@ -740,7 +725,7 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="right">右辺.</param>
 		/// <returns>計算後のベクトル.</returns>
-		Vector3&& operator - (const Vector3& right) && noexcept
+		Vector3&& operator-(const Vector3& right) && noexcept
 		{
 			return std::move(*this -= right);
 		}
@@ -750,14 +735,9 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="right">右辺.</param>
 		/// <returns>計算後のベクトル.</returns>
-		constexpr Vector3 operator * (const value_type right) const& noexcept
+		constexpr Vector3 operator*(value_type right) const& noexcept
 		{
-			return
-			{
-				this->x * right,
-				this->y * right,
-				this->z * right
-			};
+			return {this->x * right, this->y * right, this->z * right};
 		}
 
 		/// <summary>
@@ -765,7 +745,7 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="right">右辺.</param>
 		/// <returns>計算後のベクトル.</returns>
-		Vector3&& operator * (const value_type right) && noexcept
+		Vector3&& operator*(value_type right) && noexcept
 		{
 			return std::move(*this *= right);
 		}
@@ -776,7 +756,7 @@ namespace bavil::math
 		/// <param name="s">スカラー値.</param>
 		/// <param name="V">ベクトル.</param>
 		/// <returns>計算後のベクトル.</returns>
-		friend Vector3 operator * (const value_type left, const Vector3& right) noexcept
+		friend Vector3 operator*(value_type left, const Vector3& right) noexcept
 		{
 			return right * left;
 		}
@@ -786,14 +766,9 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="right">右辺.</param>
 		/// <returns>計算後のベクトル.</returns>
-		constexpr Vector3 operator * (const Vector3& right) const& noexcept
+		constexpr Vector3 operator*(const Vector3& right) const& noexcept
 		{
-			return
-			{
-				this->x * right.x,
-				this->y * right.y,
-				this->z * right.z
-			};
+			return {this->x * right.x, this->y * right.y, this->z * right.z};
 		}
 
 		/// <summary>
@@ -801,23 +776,23 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="right">右辺.</param>
 		/// <returns>計算後のベクトル.</returns>
-		Vector3&& operator * (const Vector3& right) && noexcept
+		Vector3&& operator*(const Vector3& right) && noexcept
 		{
 			return std::move(*this *= right);
 		}
 
-		friend Vector3 operator * (const Matrix33& M, const Vector3& v) noexcept;
+		friend Vector3 operator*(const Matrix33& M, const Vector3& v) noexcept;
 
-		Vector3 operator * (const Matrix33& M) const noexcept;
+		Vector3 operator*(const Matrix33& M) const noexcept;
 
 		/// <summary>
 		/// 除算2項演算子オーバーロード.
 		/// </summary>
 		/// <param name="s">スカラー値.</param>
 		/// <returns>計算後のベクトル.</returns>
-		constexpr Vector3 operator / (const value_type right) const&
+		constexpr Vector3 operator/(value_type right) const&
 		{
-			return{ this->x / right, this->y / right, this->z / right };
+			return {this->x / right, this->y / right, this->z / right};
 		}
 
 		/// <summary>
@@ -825,7 +800,7 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="s">スカラー値.</param>
 		/// <returns>計算後のベクトル.</returns>
-		Vector3&& operator / (const value_type right)&&
+		Vector3&& operator/(value_type right) &&
 		{
 			return std::move(*this /= right);
 		}
@@ -835,9 +810,9 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="right">スカラー値.</param>
 		/// <returns>計算後のベクトル.</returns>
-		constexpr Vector3 operator / (const Vector3& right) const&
+		constexpr Vector3 operator/(const Vector3& right) const&
 		{
-			return{ this->x / right.x, this->y / right.y, this->z / right.z };
+			return {this->x / right.x, this->y / right.y, this->z / right.z};
 		}
 
 		/// <summary>
@@ -845,7 +820,7 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="right">スカラー値.</param>
 		/// <returns>計算後のベクトル.</returns>
-		Vector3&& operator / (const Vector3& right)&&
+		Vector3&& operator/(const Vector3& right) &&
 		{
 			return std::move(*this /= right);
 		}
@@ -855,12 +830,9 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="right">右辺値.</param>
 		/// <returns>要素が違っていれば真を返す.</returns>
-		constexpr bool operator == (const Vector3& right) const noexcept
+		constexpr bool operator==(const Vector3& right) const noexcept
 		{
-			return
-				this->x == right.x &&
-				this->y == right.y &&
-				this->z == right.z;
+			return this->x == right.x && this->y == right.y && this->z == right.z;
 		}
 
 		/// <summary>
@@ -868,9 +840,9 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="right">右辺値.</param>
 		/// <returns>要素が違っていれば真を返す.</returns>
-		constexpr bool operator != (const Vector3& right) const noexcept
+		constexpr bool operator!=(const Vector3& right) const noexcept
 		{
-			return	!(*this == right);
+			return !(*this == right);
 		}
 
 		/// <summary>
@@ -878,12 +850,9 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="right">右辺値.</param>
 		/// <returns>要素2より大きければ真を返す.</returns>
-		constexpr bool operator < (const Vector3& right) const noexcept
+		constexpr bool operator<(const Vector3& right) const noexcept
 		{
-			return
-				this->x < right.x&&
-				this->y < right.y&&
-				this->z < right.z;
+			return this->x < right.x && this->y < right.y && this->z < right.z;
 		}
 
 		/// <summary>
@@ -891,12 +860,9 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="right">右辺値.</param>
 		/// <returns>要素2より小さければ真を返す.</returns>
-		constexpr bool operator >(const Vector3& right) const noexcept
+		constexpr bool operator>(const Vector3& right) const noexcept
 		{
-			return
-				this->x > right.x &&
-				this->y > right.y &&
-				this->z > right.z;
+			return this->x > right.x && this->y > right.y && this->z > right.z;
 		}
 
 		/// <summary>
@@ -904,9 +870,9 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="right">右辺値.</param>
 		/// <returns>要素2以下なら真を返す.</returns>
-		constexpr bool operator <= (const Vector3& right) const noexcept
+		constexpr bool operator<=(const Vector3& right) const noexcept
 		{
-			return	!(*this > right);
+			return !(*this > right);
 		}
 
 		/// <summary>
@@ -914,10 +880,12 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="right">右辺値.</param>
 		/// <returns>要素2以上なら真を返す.</returns>
-		constexpr bool operator >= (const Vector3& right) const noexcept
+		constexpr bool operator>=(const Vector3& right) const noexcept
 		{
-			return	!(*this < right);
+			return !(*this < right);
 		}
 	};
 
-}
+} // namespace bavil::math
+
+#pragma warning(pop)
