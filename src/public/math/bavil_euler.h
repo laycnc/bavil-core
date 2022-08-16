@@ -1,6 +1,8 @@
 #pragma once
 
+#include <cmath>
 #include "bavil_type.h"
+#include "math/bavil_quaternion.h"
 
 namespace bavil::math
 {
@@ -309,12 +311,12 @@ namespace bavil::math
 
 	struct Euler
 	{
-		using self_type = Euler;
+		using self_type  = Euler;
 		using value_type = f32;
 
-		value_type	pitch;
-		value_type	yaw;
-		value_type	roll;
+		value_type pitch;
+		value_type yaw;
+		value_type roll;
 
 		/// <summary>
 		/// 単位角度.
@@ -325,12 +327,13 @@ namespace bavil::math
 		/// コンストラクタ.
 		/// </summary>
 		constexpr Euler(void) noexcept
-			: pitch()
-			, yaw()
-			, roll()
-		{ }
+		    : pitch()
+		    , yaw()
+		    , roll()
+		{
+		}
 
-		explicit Euler(none_init_t) noexcept { }
+		explicit Euler(none_init_t) noexcept {}
 
 		/// <summary>
 		/// コンストラクタ.
@@ -338,11 +341,14 @@ namespace bavil::math
 		/// <param name="pitch_">X軸周りの回転量.</param>
 		/// <param name="yaw_">Y軸周りの回転量.</param>
 		/// <param name="roll_">Z軸周りの回転量.</param>
-		constexpr Euler(value_type pitch_, value_type yaw_, value_type roll_) noexcept
-			: pitch(pitch_)
-			, yaw(yaw_)
-			, roll(roll_)
-		{ }
+		constexpr Euler(value_type pitch_,
+		                value_type yaw_,
+		                value_type roll_) noexcept
+		    : pitch(pitch_)
+		    , yaw(yaw_)
+		    , roll(roll_)
+		{
+		}
 
 		self_type& identity() noexcept
 		{
@@ -350,6 +356,14 @@ namespace bavil::math
 			return *this;
 		}
 
+		Quaternion toQuaternion() const noexcept
+		{
+			//std::cos()
+			sin()
+			return {Quaternion(Vector3::UNIT_Y, Radian::Create(yaw)) *
+			        Quaternion(Vector3::UNIT_X, Radian::Create(pitch)) *
+			        Quaternion(Vector3::UNIT_Z, Radian::Create(roll))};
+		}
 	};
 
-}
+} // namespace bavil::math

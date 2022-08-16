@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cmath>
+#include <concepts>
 #include "bavil_type.h"
 
 namespace bavil::math
@@ -9,19 +10,31 @@ namespace bavil::math
 	class Degree;
 	class Radian;
 
-	template<class Ty = f32>
-	constexpr Ty PI = static_cast<Ty>(3.14159265358979323846264338327950288);
-	template<class Ty = f32>
-	constexpr Ty N2PI = PI<f32> * static_cast<Ty>(2.0);
-	template<class Ty = f32>
+	template<std::floating_point Ty = f32>
+	constexpr Ty PI =
+	    static_cast<Ty>(3.141592653589793238462643383279502884197169399);
+	template<std::floating_point Ty = f32>
+	constexpr Ty N2PI = PI<f32>* static_cast<Ty>(2.0);
+	template<std::floating_point Ty = f32>
 	constexpr Ty N1DIVPI = static_cast<Ty>(1.0) / PI<Ty>;
-	template<class Ty = f32>
+	template<std::floating_point Ty = f32>
 	constexpr Ty N1DIV2PI = static_cast<Ty>(1.0) / N2PI<Ty>;
-	template<class Ty = f32>
+	template<std::floating_point Ty = f32>
 	constexpr Ty PIDIV2 = PI<Ty> / static_cast<Ty>(2.0);
-	template<class Ty = f32>
+	template<std::floating_point Ty = f32>
 	constexpr Ty PIDIV4 = PI<Ty> / static_cast<Ty>(4.0);
 
+	/**
+	 * @brief ラジアンを角度に変換する定数
+	*/
+	template<std::floating_point Ty = f32>
+	constexpr Ty RAD_TO_DEG = PI<Ty>* static_cast<Ty>(180.0);
+
+	/**
+	 * @brief 角度をラジアンに変換する定数
+	*/
+	template<std::floating_point Ty = f32>
+	constexpr Ty DEG_TO_RAD = PI<Ty> / static_cast<Ty>(180.0);
 
 	/// <summary>
 	/// ラジアン型
@@ -32,15 +45,17 @@ namespace bavil::math
 
 	public:
 		constexpr Radian(f32 radian) noexcept
-			: m_value(radian)
-		{}
+		    : m_value(radian)
+		{
+		}
 
 		/// <summary>
 		/// デフォルトコンストラクタ.
 		/// </summary>
 		constexpr inline Radian() noexcept
-			: m_value()
-		{}
+		    : m_value()
+		{
+		}
 
 		/// <summary>
 		/// コンストラクタ.
@@ -58,90 +73,90 @@ namespace bavil::math
 			return this->m_value;
 		}
 
-		constexpr inline Radian operator + ()const noexcept
+		constexpr inline Radian operator+() const noexcept
 		{
 			return *this;
 		}
-		constexpr Radian operator - ()const noexcept
+		constexpr Radian operator-() const noexcept
 		{
-			return Radian{ -this->m_value };
+			return Radian{-this->m_value};
 		}
-		inline Radian& operator = (Degree degree) noexcept;
-		Radian& operator += (Radian other) noexcept
+		inline Radian& operator=(Degree degree) noexcept;
+		Radian&        operator+=(Radian other) noexcept
 		{
 			this->m_value += other.m_value;
 			return *this;
 		}
-		Radian& operator += (f32 other) noexcept
+		Radian& operator+=(f32 other) noexcept
 		{
 			this->m_value += other;
 			return *this;
 		}
-		Radian& operator -= (Radian other) noexcept
+		Radian& operator-=(Radian other) noexcept
 		{
 			this->m_value -= other.m_value;
 			return *this;
 		}
-		Radian& operator -= (f32 other) noexcept
+		Radian& operator-=(f32 other) noexcept
 		{
 			this->m_value -= other;
 			return *this;
 		}
-		Radian& operator *= (Radian other) noexcept
+		Radian& operator*=(Radian other) noexcept
 		{
 			this->m_value *= other.m_value;
 			return *this;
 		}
-		Radian& operator /= (Radian other) noexcept
+		Radian& operator/=(Radian other) noexcept
 		{
 			this->m_value /= other.m_value;
 			return *this;
 		}
-		constexpr Radian operator + (Radian right) const noexcept
+		constexpr Radian operator+(Radian right) const noexcept
 		{
-			return Radian{ this->m_value + right.m_value };
+			return Radian{this->m_value + right.m_value};
 		}
-		constexpr Radian operator - (Radian right) const noexcept
+		constexpr Radian operator-(Radian right) const noexcept
 		{
-			return Radian{ this->m_value - right.m_value };
+			return Radian{this->m_value - right.m_value};
 		}
-		constexpr Radian operator * (Radian right) const noexcept
+		constexpr Radian operator*(Radian right) const noexcept
 		{
-			return Radian{ this->m_value * right.m_value };
+			return Radian{this->m_value * right.m_value};
 		}
-		constexpr Radian operator * (f32 right) const noexcept
+		constexpr Radian operator*(f32 right) const noexcept
 		{
-			return Radian{ this->m_value * right };
+			return Radian{this->m_value * right};
 		}
-		constexpr Radian operator / (Radian right) const noexcept
+		constexpr Radian operator/(Radian right) const noexcept
 		{
-			return Radian{ this->m_value / right.m_value };
+			return Radian{this->m_value / right.m_value};
 		}
-		constexpr Radian operator / (f32 right) const noexcept
+		constexpr Radian operator/(f32 right) const noexcept
 		{
-			return Radian{ this->m_value / right };
+			return Radian{this->m_value / right};
 		}
-		constexpr bool operator == (const Radian& right) const noexcept
+		constexpr bool operator==(const Radian& right) const noexcept
 		{
 			return this->m_value == right.m_value;
 		}
-		constexpr bool operator != (const Radian& right) const noexcept
+		constexpr bool operator!=(const Radian& right) const noexcept
 		{
 			return this->m_value != right.m_value;
 		}
-		constexpr bool operator < (const Radian& right) const noexcept
+		constexpr bool operator<(const Radian& right) const noexcept
 		{
 			return this->m_value < right.m_value;
 		}
-		constexpr bool operator <= (const Radian& right) const noexcept
+		constexpr bool operator<=(const Radian& right) const noexcept
 		{
 			return this->m_value < right.m_value;
 		}
-		constexpr bool operator > (const Radian& right) const noexcept
+		constexpr bool operator>(const Radian& right) const noexcept
 		{
 			return this->m_value > right.m_value;
 		}
-		constexpr bool operator >= (const Radian& right) const noexcept
+		constexpr bool operator>=(const Radian& right) const noexcept
 		{
 			return this->m_value > right.m_value;
 		}
@@ -217,25 +232,28 @@ namespace bavil::math
 			return std::atan2(y.m_value, x.m_value);
 		}
 
-		friend inline void SinCos(Radian& out_sin, Radian& out_cos, Radian _value) noexcept
+		friend inline void SinCos(Radian& out_sin,
+		                          Radian& out_cos,
+		                          Radian  _value) noexcept
 		{
 			constexpr f32 PIDIV2 = 1.570796327f;
 
 			// Map Value to y in [-pi,pi], x = 2*pi*quotient + remainder.
-			const f32 quotient = static_cast<f32>(static_cast<int>(PI<f32> * _value.get() + _value.get() >= 0.f ? 0.5f : -0.5f));
+			const f32 quotient = static_cast<f32>(static_cast<int>(
+			    PI<f32> * _value.get() + _value.get() >= 0.f ? 0.5f : -0.5f));
 
 			f32 y = _value.get() - PI<f32> * quotient;
 
 			// Map y to [-pi/2,pi/2] with sin(y) = sin(Value).
 			f32 sign;
-			if (y > PIDIV2)
+			if ( y > PIDIV2 )
 			{
-				y = PI<f32> - y;
+				y    = PI<f32> - y;
 				sign = -1.0f;
 			}
-			else if (y < -PIDIV2)
+			else if ( y < -PIDIV2 )
 			{
-				y = -PI<f32> - y;
+				y    = -PI<f32> - y;
 				sign = -1.0f;
 			}
 			else
@@ -246,10 +264,25 @@ namespace bavil::math
 			const f32 y2 = y * y;
 
 			// 11-degree minimax approximation
-			out_sin.m_value = (((((-2.3889859e-08f * y2 + 2.7525562e-06f) * y2 - 0.00019840874f) * y2 + 0.0083333310f) * y2 - 0.16666667f) * y2 + 1.0f) * y;
+			out_sin.m_value =
+			    (((((-2.3889859e-08f * y2 + 2.7525562e-06f) * y2 - 0.00019840874f) *
+			           y2 +
+			       0.0083333310f) *
+			          y2 -
+			      0.16666667f) *
+			         y2 +
+			     1.0f) *
+			    y;
 
 			// 10-degree minimax approximation
-			const f32 p = ((((-2.6051615e-07f * y2 + 2.4760495e-05f) * y2 - 0.0013888378f) * y2 + 0.041666638f) * y2 - 0.5f) * y2 + 1.0f;
+			const f32 p =
+			    ((((-2.6051615e-07f * y2 + 2.4760495e-05f) * y2 - 0.0013888378f) *
+			          y2 +
+			      0.041666638f) *
+			         y2 -
+			     0.5f) *
+			        y2 +
+			    1.0f;
 			out_cos.m_value = sign * p;
 		}
 
@@ -265,8 +298,8 @@ namespace bavil::math
 
 		friend inline constexpr Degree ToDegree(Radian) noexcept;
 		friend inline constexpr Radian ToRadian(Degree) noexcept;
-		friend constexpr Radian operator ""_rad(floating_identifier) noexcept;
-		friend constexpr Radian operator ""_rad(uint_identifier) noexcept;
+		friend constexpr Radian        operator""_rad(floating_identifier) noexcept;
+		friend constexpr Radian        operator""_rad(uint_identifier) noexcept;
 	};
 
 	/// <summary>
@@ -274,9 +307,9 @@ namespace bavil::math
 	/// </summary>
 	/// <param name="radian">ラジアン値.</param>
 	/// <returns>ラジアンを返す</returns>
-	constexpr Radian operator ""_rad(floating_identifier radian) noexcept
+	constexpr Radian operator""_rad(floating_identifier radian) noexcept
 	{
-		return Radian{ static_cast<f32>(radian) };
+		return Radian{static_cast<f32>(radian)};
 	}
 
 	/// <summary>
@@ -284,7 +317,7 @@ namespace bavil::math
 	/// </summary>
 	/// <param name="radian">ラジアン値.</param>
 	/// <returns>ラジアンを返す</returns>
-	constexpr Radian operator ""_rad(uint_identifier radian) noexcept
+	constexpr Radian operator""_rad(uint_identifier radian) noexcept
 	{
 		return operator""_rad(static_cast<floating_identifier>(radian));
 	}
@@ -301,16 +334,17 @@ namespace bavil::math
 		/// </summary>
 		/// <param name="degree">度数.</param>
 		constexpr Degree(f32 degree) noexcept
-			: m_value(degree)
-		{}
+		    : m_value(degree)
+		{
+		}
 	public:
-
 		/// <summary>
 		/// デフォルトコンストラクタ.
 		/// </summary>
 		constexpr Degree() noexcept
-			: m_value()
-		{}
+		    : m_value()
+		{
+		}
 
 		/// <summary>
 		/// コンストラクタ.
@@ -327,80 +361,80 @@ namespace bavil::math
 			return this->m_value;
 		}
 
-		constexpr Degree operator + ()const noexcept
+		constexpr Degree operator+() const noexcept
 		{
 			return *this;
 		}
-		constexpr Degree operator - ()const noexcept
+		constexpr Degree operator-() const noexcept
 		{
-			return Degree{ -this->m_value };
+			return Degree{-this->m_value};
 		}
-		inline Degree& operator = (Radian radian) noexcept;
-		inline Degree& operator += (Degree other) noexcept
+		inline Degree& operator=(Radian radian) noexcept;
+		inline Degree& operator+=(Degree other) noexcept
 		{
 			this->m_value += other.m_value;
 			return *this;
 		}
-		inline Degree& operator -= (Degree other) noexcept
+		inline Degree& operator-=(Degree other) noexcept
 		{
 			this->m_value -= other.m_value;
 			return *this;
 		}
-		inline Degree& operator *= (Degree other) noexcept
+		inline Degree& operator*=(Degree other) noexcept
 		{
 			this->m_value *= other.m_value;
 			return *this;
 		}
-		inline Degree& operator /= (Degree other) noexcept
+		inline Degree& operator/=(Degree other) noexcept
 		{
 			this->m_value /= other.m_value;
 			return *this;
 		}
-		constexpr inline Degree operator + (Degree right) const noexcept
+		constexpr inline Degree operator+(Degree right) const noexcept
 		{
-			return Degree{ this->m_value + right.m_value };
+			return Degree{this->m_value + right.m_value};
 		}
-		constexpr inline Degree operator - (Degree right) const noexcept
+		constexpr inline Degree operator-(Degree right) const noexcept
 		{
-			return Degree{ this->m_value - right.m_value };
+			return Degree{this->m_value - right.m_value};
 		}
-		constexpr inline Degree operator * (Degree right) const noexcept
+		constexpr inline Degree operator*(Degree right) const noexcept
 		{
-			return Degree{ this->m_value * right.m_value };
+			return Degree{this->m_value * right.m_value};
 		}
-		constexpr inline Degree operator * (f32 right) const noexcept
+		constexpr inline Degree operator*(f32 right) const noexcept
 		{
-			return Degree{ this->m_value * right };
+			return Degree{this->m_value * right};
 		}
-		constexpr inline Degree operator / (Degree right) const noexcept
+		constexpr inline Degree operator/(Degree right) const noexcept
 		{
-			return Degree{ this->m_value / right.m_value };
+			return Degree{this->m_value / right.m_value};
 		}
-		constexpr inline Degree operator / (f32 right) const noexcept
+		constexpr inline Degree operator/(f32 right) const noexcept
 		{
-			return Degree{ this->m_value / right };
+			return Degree{this->m_value / right};
 		}
-		constexpr inline bool operator == (const Degree& right) const noexcept
+		constexpr inline bool operator==(const Degree& right) const noexcept
 		{
 			return this->m_value == right.m_value;
 		}
-		constexpr inline bool operator != (const Degree& right) const noexcept
+		constexpr inline bool operator!=(const Degree& right) const noexcept
 		{
 			return this->m_value != right.m_value;
 		}
-		constexpr inline bool operator < (const Degree& right) const noexcept
+		constexpr inline bool operator<(const Degree& right) const noexcept
 		{
 			return this->m_value < right.m_value;
 		}
-		constexpr inline bool operator <= (const Degree& right) const noexcept
+		constexpr inline bool operator<=(const Degree& right) const noexcept
 		{
 			return this->m_value < right.m_value;
 		}
-		constexpr inline bool operator > (const Degree& right) const noexcept
+		constexpr inline bool operator>(const Degree& right) const noexcept
 		{
 			return this->m_value > right.m_value;
 		}
-		constexpr inline bool operator >= (const Degree& right) const noexcept
+		constexpr inline bool operator>=(const Degree& right) const noexcept
 		{
 			return this->m_value > right.m_value;
 		}
@@ -411,7 +445,8 @@ namespace bavil::math
 		/// <returns></returns>
 		static constexpr Degree Normalize(Degree degree) noexcept
 		{
-			return Degree(degree.m_value - static_cast<int>(degree.m_value / 360) * 360.f);
+			return Degree(degree.m_value -
+			              static_cast<int>(degree.m_value / 360) * 360.f);
 		}
 
 		/// <summary>
@@ -441,8 +476,8 @@ namespace bavil::math
 
 		friend inline constexpr Degree ToDegree(Radian) noexcept;
 		friend inline constexpr Radian ToRadian(Degree) noexcept;
-		friend constexpr Degree operator ""_deg(floating_identifier) noexcept;
-		friend constexpr Degree operator ""_deg(uint_identifier) noexcept;
+		friend constexpr Degree        operator""_deg(floating_identifier) noexcept;
+		friend constexpr Degree        operator""_deg(uint_identifier) noexcept;
 	};
 
 	/// <summary>
@@ -450,9 +485,9 @@ namespace bavil::math
 	/// </summary>
 	/// <param name="radian">度数値.</param>
 	/// <returns>度数を返す</returns>
-	constexpr Degree operator ""_deg(floating_identifier degree) noexcept
+	constexpr Degree operator""_deg(floating_identifier degree) noexcept
 	{
-		return Degree{ static_cast<f32>(degree) };
+		return Degree{static_cast<f32>(degree)};
 	}
 
 	/// <summary>
@@ -460,7 +495,7 @@ namespace bavil::math
 	/// </summary>
 	/// <param name="radian">度数値.</param>
 	/// <returns>度数を返す</returns>
-	constexpr Degree operator ""_deg(uint_identifier degree) noexcept
+	constexpr Degree operator""_deg(uint_identifier degree) noexcept
 	{
 		return operator""_deg(static_cast<floating_identifier>(degree));
 	}
@@ -472,7 +507,7 @@ namespace bavil::math
 	/// <returns>度数を返す</returns>
 	inline constexpr Degree ToDegree(Radian radian) noexcept
 	{
-		return Degree(radian.m_value * 180.f * PI<f32>);
+		return Degree(radian.m_value * RAD_TO_DEG<f32>);
 	}
 
 	/// <summary>
@@ -482,9 +517,8 @@ namespace bavil::math
 	/// <returns>ラジアンを返す</returns>
 	inline constexpr Radian ToRadian(Degree degree) noexcept
 	{
-		return Radian(degree.m_value * PI<f32> / 180.f);
+		return Radian(degree.m_value * DEG_TO_RAD<f32>);
 	}
-
 
 	/// <summary>
 	/// コンストラクタ.
@@ -492,10 +526,11 @@ namespace bavil::math
 	/// </summary>
 	/// <param name="degree">角度.</param>
 	constexpr Radian::Radian(Degree degree) noexcept
-		: m_value(ToRadian(degree).m_value)
-	{}
+	    : m_value(ToRadian(degree).m_value)
+	{
+	}
 
-	inline Degree& Degree::operator = (Radian radian) noexcept
+	inline Degree& Degree::operator=(Radian radian) noexcept
 	{
 		return *this = Degree(radian);
 	}
@@ -505,10 +540,11 @@ namespace bavil::math
 	/// </summary>
 	/// <param name="radian">ラジアン .</param>
 	constexpr Degree::Degree(Radian radian) noexcept
-		: m_value(ToDegree(radian).m_value)
-	{}
+	    : m_value(ToDegree(radian).m_value)
+	{
+	}
 
-	inline Radian& Radian::operator = (Degree degree) noexcept
+	inline Radian& Radian::operator=(Degree degree) noexcept
 	{
 		return *this = Radian(degree);
 	}
@@ -521,8 +557,8 @@ namespace bavil::math
 	inline Degree Degree::UnsignedNormalize(Degree degree) noexcept
 	{
 		constexpr Degree _zero = 0_deg;
-		degree = Normalize(degree);
-		if (degree < _zero)
+		degree                 = Normalize(degree);
+		if ( degree < _zero )
 		{
 			return Degree(degree.m_value + 360.f);
 		}
@@ -539,15 +575,15 @@ namespace bavil::math
 	{
 		Degree result = Normalize(target - my);
 
-		if (result > 180_deg)
+		if ( result > 180_deg )
 		{
 			result -= 360_deg;
 		}
-		else if (result < -360_deg)
+		else if ( result < -360_deg )
 		{
 			result += 360_deg;
 		}
 		return result;
 	}
 
-}
+} // namespace bavil::math

@@ -18,7 +18,9 @@ namespace bavil
 	 * @brief オブジェクトの削除時に呼ばれる
 	 */
 	virtual void destruct() = 0;
+
   };
+
 
   template <class T>
   concept ObjectConcepts = requires(T obj)
